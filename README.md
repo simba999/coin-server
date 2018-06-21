@@ -71,7 +71,7 @@ There are many different providers, but the easiest one to get started with is [
 5. Select a region (I recommend the region geographically closest to your app's users).
 6. Add a name, click **Continue** again, and finally **Submit Order**.
 7. Once your new database is created, select it from the **MongoDB Deployments** section.
-8. Create a user by selecting the **User** tab, clicking the **Add database user** button, adding a username and password, and then clicking **Create**. 
+8. Create a user by selecting the **User** tab, clicking the **Add database user** button, adding a username and password, and then clicking **Create**.
 A user account is required to connect to the database, so remember these values because you will need them as part of your connection string.
 9. Copy the connection string from the top of the page, it should look like this: `mongodb://<dbuser>:<dbpassword>@ds036069.mlab.com:36069/test-asdf`
 and replace `<dbUser>` and `<dbpassword>` with the credentials you just created. 
