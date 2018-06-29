@@ -1,55 +1,91 @@
-import { Table, Column, Model, DataType, BelongsToMany } from 'sequelize-typescript';
-import { UserCompany } from './user_company';
-import { Company } from './company';
+import { Table, Column, Model, DataType, HasOne, HasMany, IsEmail, PrimaryKey, IsUUID, Is } from 'sequelize-typescript';
 import { methodNotAllowed, notFound, unauthorized } from 'boom';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 
+import { Shareholder } from './shareholder';
+import { UserToken } from './user_token';
+import { BillingSubscription } from './billing_subscription';
+
+const PASSWORD_REGEX = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[$&+,:;=?@#|'<>.^*()%!-]).{6,}$/;
+
+export enum UserRole {
+    /**
+     * Owner - This is the user type that creates the account. * They have full access including access to Billing.
+     * They are able to create and invite other user types
+     */
+    owner,
+    /**
+     * Employee - This is a user with limited access. They are typically invited when they have been issued stock.
+     * They can login and view their holdings and company info that an Owner allows.
+     */
+    employee,
+    /** Shareholder - this is a user who’s been granted a security by the company but is not an employee.
+     * Owner decides what info a shareholder has access to. Use case: This could be an investor or a past employee.
+     */
+    shareholder,
+    /**
+     * Board Member - This is a user type probably with more access than other user types.
+     * Might have to approve certain actions - a function we will build into the platform.
+     */
+    boardMember
+}
+
 @Table({
     tableName: 'users',
-    timestamps: true,
     underscored: true,
+    timestamps: true,
     paranoid: true,
 })
+
 export class User extends Model<User> {
+    @PrimaryKey
+    @IsUUID(4)
     @Column({
         type: DataType.UUID,
-        primaryKey: true,
         defaultValue: DataType.UUIDV4,
         allowNull: false,
     })
     uuid: string;
 
-    @Column user_name: string;
     @Column({
         allowNull: false,
         unique: true,
-    }) email: string;
+    })
+    email: string;
 
+    @Is('PASSWORD_VALIDATION', (value) => {
+        if (!PASSWORD_REGEX.test(value)) {
+            throw new Error(`Password "${value}" doesn't follow expected pattern.`);
+        }
+    })
     @Column({
         allowNull: false,
         set: function (password) {
             this.setDataValue('password', User.hashPassword(password));
         },
-    }) password: string;
+    })
+    password: string;
 
-    @Column first_name: string;
-    @Column last_name: string;
     @Column({
+        field: 'first_name',
+    })
+    firstName: string;
+
+    @Column({
+        field: 'last_name',
+    })
+    lastName: string;
+
+    @Column({
+        field: 'email_confirmed',
         defaultValue: false,
-    }) email_confirmed: boolean;
+    })
+    emailConfirmed: boolean;
 
-    @BelongsToMany(() => Company, () => UserCompany)
-    companies: Company[];
-
-    static async authenticate(email: string, password: string): Promise<any> {
-        const user: User = await User.findOne({where: {email: email}});
-        if (!user) throw notFound('User not found!');
-
-        if (!user.email_confirmed) throw methodNotAllowed('Email is not confirmed. You should confirm email first');
-        if (user.password !== User.hashPassword(password)) throw unauthorized('Invalid credentials');
-        return user;
-    }
+    @HasOne(() => Shareholder) shareholder: Shareholder;
+    @HasMany(() => BillingSubscription) subscriptions: BillingSubscription;
+    @HasMany(() => UserToken) tokens: UserToken;
 
     static hashPassword(password: string) {
         return crypto
@@ -62,13 +98,13 @@ export class User extends Model<User> {
         const salt = process.env.SALT || 'salt';
 
         const data = {
-            user_id: this.uuid,
+            userId: this.uuid,
         };
 
         return {
             type: 'Bearer',
-            expires_in: 86400,
-            access_token: jwt.sign(data, salt, {expiresIn: 86400})
+            expiresIn: 86400,
+            accessToken: jwt.sign(data, salt, {expiresIn: 86400})
         };
     }
 }

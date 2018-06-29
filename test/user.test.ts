@@ -1,34 +1,60 @@
-import request from "supertest";
-import app from "../src/app";
+import request from 'supertest';
+import app from '../src/app';
+import { User } from '../src/models/user';
 
-const chai = require("chai");
+const chai = require('chai');
 const expect = chai.expect;
 
-describe("GET /login", () => {
-  it("should return 200 OK", () => {
-    return request(app).get("/login")
-      .expect(200);
-  });
-});
+describe(`POST /signup`, () => {
+    beforeAll(async () => {
+        await User.destroy({
+            where: {email: ['test@email.com', 'duplicate@email.com']},
+            force: true,
+        });
 
-describe("GET /signup", () => {
-  it("should return 200 OK", () => {
-    return request(app).get("/signup")
-      .expect(200);
-  });
-});
+    });
 
+    it(`should return 201 Created' on signup`, () => {
+        return request(app)
+            .post('/v1/signup')
+            .send({
+                firstName: 'test',
+                lastName: 'test',
+                email: 'test@email.com',
+                phone: '89092345675',
+                password: 'password1'
+            })
+            .expect(201);
+    });
 
-describe("POST /login", () => {
-  it("should return some defined error message with valid parameters", (done) => {
-    return request(app).post("/login")
-      .field("email", "john@me.com")
-      .field("password", "Hunter2")
-      .expect(302)
-      .end(function(err, res) {
-        expect(res.error).not.to.be.undefined;
-        done();
-      });
+    it(`should return 400 OK if user with such email already exists`, async (done) => {
+        await request(app)
+            .post('/v1/signup')
+            .send({
+                firstName: 'test',
+                lastName: 'test',
+                email: 'duplicate@email.com',
+                phone: '89092345675',
+                password: 'password1'
+            })
+            .expect(201);
 
-  });
+        request(app)
+            .post('/v1/signup')
+            .send({
+                firstName: 'test',
+                lastName: 'test',
+                email: 'duplicate@email.com',
+                phone: '89092345675',
+                password: 'password1'
+            })
+            .expect(400)
+            .end((err, res) => {
+                expect(res.status).to.equal(400);
+                expect(res.body).to.have.property('error');
+                expect(res.body.error).to.equal('Bad Request');
+                expect(res.body.message).to.equal('User with such email already exists!');
+                done();
+            });
+    });
 });
