@@ -7,7 +7,7 @@ import { Shareholder } from './shareholder';
 import { UserToken } from './user_token';
 import { BillingSubscription } from './billing_subscription';
 
-const PASSWORD_REGEX = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[$&+,:;=?@#|'<>.^*()%!-]).{6,}$/;
+export const PASSWORD_REGEX = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[$&+,:;=?@#|'<>.^*()%!-]).{6,}$/;
 
 export enum UserRole {
     /**
@@ -54,11 +54,6 @@ export class User extends Model<User> {
     })
     email: string;
 
-    @Is('PASSWORD_VALIDATION', (value) => {
-        if (!PASSWORD_REGEX.test(value)) {
-            throw new Error(`Password "${value}" doesn't follow expected pattern.`);
-        }
-    })
     @Column({
         allowNull: false,
         set: function (password) {

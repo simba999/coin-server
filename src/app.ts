@@ -1,11 +1,10 @@
 import express, { NextFunction, Request, Response } from 'express';
-import compression from 'compression';  // compresses requests
+import compression from 'compression';
 import bodyParser from 'body-parser';
 import lusca from 'lusca';
 import expressValidator from 'express-validator';
 import generateConfig from './config';
-import { initSequelize, syncDatabase } from './database';
-import createDebug from 'debug';
+import { initSequelize } from './database';
 import UserController from './controllers/user';
 import AccountController from './controllers/account';
 import passport from 'passport';
@@ -15,14 +14,12 @@ import { User } from './models/user';
 const config = generateConfig();
 const sequelize = initSequelize(config);
 
-const debug = createDebug('ap:server');
-
 const JwtStrategy = passportJwt.Strategy;
 const ExtractJwt = passportJwt.ExtractJwt;
 
 passport.use(new JwtStrategy({
         secretOrKey: process.env.SALT || 'ishu',
-        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+        jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('Bearer'),
     },
     async function (payload: any, done: any) {
         const user = await User.findById(payload.userId);
@@ -56,7 +53,7 @@ app.use(lusca.xssProtection(true));
 app.use(passport.initialize());
 
 app.use((req, res, next) => {
-    debug(`${req.method} ${req.url}`);
+    console.info(`${new Date()}: [${req.method}] ${req.url}`);
     next();
 });
 
@@ -67,13 +64,11 @@ app.use('/v1', AccountController);
  * Primary app routes.
  */
 app.get('/config', (req, res) => {
-    syncDatabase();
     res.json(config);
 });
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-    debug(`${req.url}: ${err.message}`);
-    console.error(err);
+    console.error(`${req.url}: ${err.message}`);
 
     if (err.isBoom) {
         return res

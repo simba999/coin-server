@@ -7,7 +7,6 @@ import {
     ForeignKey,
     PrimaryKey,
     IsUUID,
-    IsDate
 } from 'sequelize-typescript';
 import { Security } from './security';
 import { Shareholder } from './shareholder';
@@ -38,6 +37,7 @@ export class SecurityTransaction extends Model<SecurityTransaction> {
     }) restricted: boolean;
 
     @Column({
+        type: DataType.DATE,
         field: 'restricted_until',
         allowNull: true,
     })

@@ -3,7 +3,7 @@ import * as express from 'express';
 import { object, string } from 'joi';
 import { errorWrap } from '../utils';
 import validate from '../middleware/validate';
-import { User } from '../models/user';
+import { PASSWORD_REGEX, User } from '../models/user';
 import passport from 'passport';
 import { badRequest, methodNotAllowed, notFound, unauthorized } from 'boom';
 
@@ -19,7 +19,7 @@ router.post('/signup',
             lastName: string().required(),
             email: string().email().required(),
             phone: string().regex(/^\d{10,11}$/i).required(),
-            password: string().min(5).required(),
+            password: string().min(5).required().regex(PASSWORD_REGEX),
         }),
     }),
     errorWrap(async (req: Request, res: Response) => {
@@ -29,7 +29,7 @@ router.post('/signup',
             where: {email: body.email.toLowerCase()},
         })) throw badRequest('User with such email already exists!');
 
-        body.emailConfirmed = true;
+        body.emailConfirmed = true; // temp
         const user = await User.create(body);
 
         res.status(201).json(user);
@@ -57,7 +57,7 @@ router.post('/login',
 
         const token = await user.generateToken();
 
-        res.status(201).json(token);
+        res.status(200).json(token);
     }),
 );
 
@@ -91,11 +91,9 @@ router.patch('/users/password',
  *
  */
 router.get('/me',
-    passport.authenticate('jwt'),
+    passport.authenticate('jwt', { session: false }),
     errorWrap(async (req: Request, res: Response) => {
-        return res.json({
-            user: req.user
-        });
+        return res.json({user: req.user});
     })
 );
 

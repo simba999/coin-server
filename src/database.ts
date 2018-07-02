@@ -45,13 +45,7 @@ export async function initSequelize(config: any) {
         BillingCard,
     ]);
 
-    await sequelize.sync({force: true, logging: true});
+    // await sequelize.sync({force: true, logging: true});
 
     return sequelize;
-}
-
-export function syncDatabase() {
-    console.log('sync');
-
-    return 'test';
 }

@@ -42,6 +42,7 @@ export class Shareholder extends Model<Shareholder> {
     userId: string;
 
     @Column({
+        type: DataType.DATE,
         field: 'invited_at',
     })
     invitedAt: Date;
