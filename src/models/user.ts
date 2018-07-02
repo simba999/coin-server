@@ -90,7 +90,7 @@ export class User extends Model<User> {
     }
 
     async generateToken(): Promise<any> {
-        const salt = process.env.SALT || 'salt';
+        const salt = process.env.SALT || 'ishu';
 
         const data = {
             userId: this.uuid,
