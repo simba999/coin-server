@@ -18,7 +18,7 @@ const JwtStrategy = passportJwt.Strategy;
 const ExtractJwt = passportJwt.ExtractJwt;
 
 passport.use(new JwtStrategy({
-        secretOrKey: process.env.SALT || 'ishu',
+        secretOrKey: config.secrets.salt,
         jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('Bearer'),
     },
     async function (payload: any, done: any) {
@@ -36,13 +36,9 @@ passport.deserializeUser(function (user, done) {
     done(null, user);
 });
 
-// Create Express server
 const app = express();
 
-
-// Express configuration
 app.set('port', process.env.PORT || 3000);
-
 app.set('sequelize', sequelize);
 app.use(compression());
 app.use(bodyParser.json());
@@ -60,9 +56,6 @@ app.use((req, res, next) => {
 app.use('/v1', UserController);
 app.use('/v1', AccountController);
 
-/**
- * Primary app routes.
- */
 app.get('/config', (req, res) => {
     res.json(config);
 });

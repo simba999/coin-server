@@ -6,8 +6,10 @@ import jwt from 'jsonwebtoken';
 import { Shareholder } from './shareholder';
 import { UserToken } from './user_token';
 import { BillingSubscription } from './billing_subscription';
+import generateConfig from '../config';
 
 export const PASSWORD_REGEX = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[$&+,:;=?@#|'<>.^*()%!-]).{6,}$/;
+const config = generateConfig();
 
 export enum UserRole {
     /**
@@ -90,8 +92,6 @@ export class User extends Model<User> {
     }
 
     async generateToken(): Promise<any> {
-        const salt = process.env.SALT || 'ishu';
-
         const data = {
             userId: this.uuid,
         };
@@ -99,7 +99,7 @@ export class User extends Model<User> {
         return {
             type: 'Bearer',
             expiresIn: 86400,
-            accessToken: jwt.sign(data, salt, {expiresIn: 86400})
+            accessToken: jwt.sign(data, config.secrets.salt, {expiresIn: 86400})
         };
     }
 }

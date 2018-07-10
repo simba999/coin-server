@@ -1,15 +1,21 @@
 import dotenv from 'dotenv';
 
 export default function generateConfig(dotenvPath = '.env') {
-    const env = dotenv.config({ path: dotenvPath }).parsed || process.env;
+    const env = dotenv.config({path: dotenvPath}).parsed || process.env;
     const pkg = require('../package.json');
 
-    return {
+    const config = {
         env: env.ENV,
         debug: env.DEBUG,
         version: pkg.version,
         database: {
-            uri: 'mysql://root:0123456789@localhost/ishu_local'
+            uri: env.DATABASE_URI,
+            logging: env.DATABASE_LOGGIN,
+        },
+        secrets: {
+            salt: env.SALT || 'ishu',
         }
     };
+
+    return config;
 }

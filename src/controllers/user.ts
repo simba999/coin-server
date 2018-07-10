@@ -17,7 +17,7 @@ router.post('/signup',
         body: object().keys({
             firstName: string().required(),
             lastName: string().required(),
-            email: string().email().required(),
+            email: string().email().required().lowercase(),
             phone: string().regex(/^\d{10,11}$/i).required(),
             password: string().min(5).required().regex(PASSWORD_REGEX),
         }),
@@ -68,8 +68,9 @@ router.patch('/users/password',
     passport.authenticate('jwt'),
     validate({
         body: object().keys({
-            password: string().required(),
+            password: string().required().regex(PASSWORD_REGEX),
             passwordConfirm: string().required(),
+            currentPassword: string().required(),
         }),
     }),
     errorWrap(async (req: Request, res: Response) => {

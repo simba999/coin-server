@@ -45,7 +45,5 @@ export async function initSequelize(config: any) {
         BillingCard,
     ]);
 
-    // await sequelize.sync({force: true, logging: true});
-
     return sequelize;
 }

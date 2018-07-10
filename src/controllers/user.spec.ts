@@ -3,12 +3,13 @@ import request from 'supertest';
 import should from 'should';
 import app from '../app';
 import { User } from '../models/user';
+import { seedDatabase } from '../tests/test.service';
 
 const PASSWORD = 'Password1#';
 
 describe(`POST /signup`, () => {
     beforeEach(async () => {
-        await User.destroy({where: {}, force: true});
+        await seedDatabase();
     });
 
     it(`should return 201 Created' on signup`, () => {
@@ -97,6 +98,10 @@ describe(`POST /signup`, () => {
             .set('Authorization', `Bearer ${accessToken}`)
             .expect(200);
 
-        console.log(body);
+        should.exist(body.user);
+    });
+
+    it('should patch password for authenticated user', async () => {
+
     });
 });
