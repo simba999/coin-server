@@ -80,6 +80,18 @@ export class User extends Model<User> {
     })
     emailConfirmed: boolean;
 
+    @Column({
+        type: DataType.DATE,
+        field: 'created_at',
+    })
+    createdAt: boolean;
+
+    @Column({
+        type: DataType.DATE,
+        field: 'deleted_at',
+    })
+    deletedAt: boolean;
+
     @HasOne(() => Shareholder) shareholder: Shareholder;
     @HasMany(() => BillingSubscription) subscriptions: BillingSubscription;
     @HasMany(() => UserToken) tokens: UserToken;

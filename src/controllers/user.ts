@@ -20,7 +20,7 @@ router.post('/signup',
             email: string().email().required().lowercase(),
             phone: string().regex(/^\d{10,11}$/i).required(),
             password: string().min(5).required().regex(PASSWORD_REGEX),
-        }),
+        }).unknown(),
     }),
     errorWrap(async (req: Request, res: Response) => {
         const body = req.body;
@@ -39,12 +39,12 @@ router.post('/signup',
 /**
  *
  */
-router.post('/login',
+router.post('/signin',
     validate({
         body: object().keys({
             email: string().email().required(),
             password: string().required(),
-        }),
+        }).unknown(),
     }),
     errorWrap(async (req: Request, res: Response) => {
         const body = req.body;
@@ -57,7 +57,7 @@ router.post('/login',
 
         const token = await user.generateToken();
 
-        res.status(200).json(token);
+        res.json({token, user});
     }),
 );
 

@@ -7,6 +7,7 @@ export default function generateConfig(dotenvPath = '.env') {
     const config = {
         env: env.ENV,
         debug: env.DEBUG,
+        port: env.PORT || '5000',
         version: pkg.version,
         database: {
             uri: env.DATABASE_URI,
@@ -14,7 +15,7 @@ export default function generateConfig(dotenvPath = '.env') {
         },
         secrets: {
             salt: env.SALT || 'ishu',
-        }
+        },
     };
 
     return config;

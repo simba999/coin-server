@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import compression from 'compression';
 import bodyParser from 'body-parser';
-import lusca from 'lusca';
+import cors from 'cors';
 import expressValidator from 'express-validator';
 import generateConfig from './config';
 import { initSequelize } from './database';
@@ -38,14 +38,13 @@ passport.deserializeUser(function (user, done) {
 
 const app = express();
 
-app.set('port', process.env.PORT || 3000);
+app.set('port', config.port);
 app.set('sequelize', sequelize);
 app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(expressValidator());
-app.use(lusca.xframe('SAMEORIGIN'));
-app.use(lusca.xssProtection(true));
+app.use(cors({origin: '*'}));
 app.use(passport.initialize());
 
 app.use((req, res, next) => {
@@ -58,6 +57,10 @@ app.use('/v1', AccountController);
 
 app.get('/config', (req, res) => {
     res.json(config);
+});
+
+app.get('/ping', (req, res) => {
+    res.sendStatus(204);
 });
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
