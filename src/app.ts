@@ -9,7 +9,6 @@ import UserController from './controllers/user';
 import AccountController from './controllers/account';
 import passport from 'passport';
 import passportJwt from 'passport-jwt';
-import facebook from 'passport-facebook';
 import { User } from './models/user';
 
 const config = generateConfig();
@@ -36,41 +35,6 @@ passport.serializeUser(function (user, done) {
 passport.deserializeUser(function (user, done) {
     done(null, user);
 });
-
-passport.use(new facebook.Strategy({
-        clientID: process.env.PASSPORT_FACEBOOK_CLIENT_ID,
-        clientSecret: process.env.PASSPORT_FACEBOOK_CLIENT_SECRET,
-        callbackURL: process.env.PASSPORT_FACEBOOK_CALLBACK_URL
-    },
-    async (accessToken: string, refreshToken: string, profile: facebook.Profile, done: (error: any, user?: any) => void) => {
-        const user = await User.findById(profile.id);
-        if (!user) return done(null, false);
-        done(null, user);
-    })
-);
-
-passport.use(new facebook.Strategy({
-        clientID: process.env.PASSPORT_FACEBOOK_CLIENT_ID,
-        clientSecret: process.env.PASSPORT_FACEBOOK_CLIENT_SECRET,
-        callbackURL: process.env.PASSPORT_FACEBOOK_CALLBACK_URL,
-        passReqToCallback: true
-    },
-    async (req: express.Request, accessToken: string, refreshToken: string, profile: facebook.Profile, done: (error: any, user?: any) => void) => {
-        const user = await User.findById(profile.id);
-        if (!user) return done(null, false);
-        done(null, user);
-    })
-);
-
-passport.use(new facebook.Strategy({
-        clientID: process.env.PASSPORT_FACEBOOK_CLIENT_ID,
-        clientSecret: process.env.PASSPORT_FACEBOOK_CLIENT_SECRET,
-        callbackURL: process.env.PASSPORT_FACEBOOK_CALLBACK_URL
-    },
-    (accessToken: string, refreshToken: string, profile: facebook.Profile, done: (error: any, user?: any, info?: any) => void) => {
-        done(null, false, { message: 'Some error.' });
-    })
-);
 
 const app = express();
 
