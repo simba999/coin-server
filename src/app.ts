@@ -7,6 +7,7 @@ import generateConfig from './config';
 import { initSequelize } from './database';
 import UserController from './controllers/user';
 import AccountController from './controllers/account';
+import CaptableController from './controllers/captable';
 import passport from 'passport';
 import passportJwt from 'passport-jwt';
 import { User } from './models/user';
@@ -54,6 +55,7 @@ app.use((req, res, next) => {
 
 app.use('/v1', UserController);
 app.use('/v1', AccountController);
+app.use('/v1', CaptableController);
 
 app.get('/config', (req, res) => {
     res.json(config);

@@ -7,8 +7,7 @@ import { Account } from '../models/account';
 
 const router = express.Router();
 
-// create company
-router.post('/accounts',
+router.post('/captable',
     validate({
         body: object().keys({
             type: string().valid('company'),
@@ -22,8 +21,7 @@ router.post('/accounts',
     }),
 );
 
-// get companies
-router.get('/accounts',
+router.get('/captable',
     validate({
         body: object().keys({}),
     }),
@@ -32,17 +30,7 @@ router.get('/accounts',
     }),
 );
 
-// get specific company
-router.get('/accounts/:uuid',
-    validate({
-        body: object().keys({}),
-    }),
-    errorWrap(async (req: Request, res: Response) => {
-        res.status(200);
-    }),
-);
-
-router.patch('/accounts/:uuid',
+router.get('/captable/:uuid',
     validate({
         body: object().keys({}),
     }),
