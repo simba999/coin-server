@@ -42,8 +42,10 @@ router.put('/accounts',
         const account = await Account.findById(body.accountId);
         if (!account) notFound('Account not found');
 
-        account.type = body.type;
-        account.name = body.name;
+        if (body.type)
+            account.type = body.type;
+        if (body.name)
+            account.name = body.name;
         await account.save();
 
         res.json({
