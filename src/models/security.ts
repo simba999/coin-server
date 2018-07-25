@@ -62,5 +62,4 @@ export class Security extends Model<Security> {
 
     @HasMany(() => SecurityTransaction) securityTransactions: SecurityTransaction[];
     @BelongsTo(() => Account) account: Account;
-    @BelongsTo(() => Security) security: Security;
 }

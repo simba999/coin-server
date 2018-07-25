@@ -4,6 +4,7 @@ import { object, string } from 'joi';
 import { errorWrap } from '../utils';
 import validate from '../middleware/validate';
 import { Account } from '../models/account';
+import { badRequest, notFound } from 'boom';
 
 const router = express.Router();
 
@@ -11,24 +12,44 @@ const router = express.Router();
 router.post('/accounts',
     validate({
         body: object().keys({
-            type: string().valid('company'),
+            type: string().valid(['company']),
             name: string().max(255),
         }),
     }),
     errorWrap(async (req: Request, res: Response) => {
-        const account = Account.create(req.body);
+        const body = req.body;
 
-        res.json(account);
+        const account = await Account.create(body);
+        res.json({
+            status: 'success',
+            data: account
+        });
     }),
 );
 
-// get companies
-router.get('/accounts',
+// update company info
+router.put('/accounts',
     validate({
-        body: object().keys({}),
+        body: object().keys({
+            accountId: string().required(),
+            type: string().valid(['company']),
+            name: string().max(255),
+        }),
     }),
     errorWrap(async (req: Request, res: Response) => {
-        res.status(200);
+        const body = req.body;
+
+        const account = await Account.findById(body.accountId);
+        if (!account) notFound('Account not found');
+
+        account.type = body.type;
+        account.name = body.name;
+        await account.save();
+
+        res.json({
+            status: 'success',
+            data: account
+        });
     }),
 );
 
@@ -38,17 +59,32 @@ router.get('/accounts/:uuid',
         body: object().keys({}),
     }),
     errorWrap(async (req: Request, res: Response) => {
-        res.status(200);
+        const params = req.params;
+
+        const account = await Account.findById(params.uuid);
+        if (!account) notFound('Account not found');
+        res.json({
+            status: 'success',
+            data: account
+        });
     }),
 );
 
-router.patch('/accounts/:uuid',
+// delete specific company
+router.delete('/accounts/:uuid',
     validate({
         body: object().keys({}),
     }),
     errorWrap(async (req: Request, res: Response) => {
-        res.status(200);
-    }),
-);
+        const params = req.params;
+
+        const account = await Account.findById(params.uuid);
+        if (!account) notFound('Account not found');
+        await account.destroy();
+
+        res.json({
+            status: 'success'
+        });
+    }));
 
 export default router;

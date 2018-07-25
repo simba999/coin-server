@@ -29,6 +29,7 @@
     "@types/passport-jwt": "^3.0.1",
     "@types/passport-local": "^1.0.33",
     "@types/sequelize": "^4.27.23",
+    "@types/uuid": "^3.4.3",
     "@types/yargs": "^11.0.0",
     "async": "^2.6.1",
     "body-parser": "^1.18.3",
@@ -55,6 +56,7 @@
     "sequelize": "^4.38.0",
     "sequelize-cli-typescript": "^3.2.0-c",
     "sequelize-typescript": "^0.6.5",
+    "uuid": "^3.3.2",
     "yargs": "^12.0.1"
   },
   "devDependencies": {
