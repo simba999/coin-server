@@ -389,3 +389,89 @@ SecurityTransaction API requires common request header:
             {
                 "status": "success"
             }
+            
+**6. ShareholderAccount API**
+-----
+
+ShareholderAccount API requires common request header: 
+
+        Content-Type: application/json
+        Authorization: Bearer 'Token'
+        
+- Create ShareholderAccount
+
+        - Endpoint: /v1/shareholder-account
+        - Method: POST
+        - Request:
+            {
+                "shareholderId": "0405befe-7339-4e60-9317-c967cedae787",
+                "accountId": "927f0f63-735e-4739-8be1-ed2d47eb0cad",
+                "role": "owner"
+            }
+        - Response:
+            {
+                "status": "success",
+                "data": {
+                    "uuid": "0876d36e-4ab9-4b19-a8a6-54967f3a0905",
+                    "shareholderId": "0405befe-7339-4e60-9317-c967cedae787",
+                    "accountId": "927f0f63-735e-4739-8be1-ed2d47eb0cad",
+                    "role": "owner",
+                    "updated_at": "2018-07-27T04:23:45.428Z",
+                    "created_at": "2018-07-27T04:23:45.428Z",
+                    "deleted_at": null
+                }
+            }
+            
+- Update ShareholderAccount
+
+        - Endpoint: /v1/shareholder-account
+        - Method: PUT
+        - Request:
+            {
+                "shareholderAccountId": "0876d36e-4ab9-4b19-a8a6-54967f3a0905",
+                "shareholderId": "0405befe-7339-4e60-9317-c967cedae787",
+                "accountId": "0d7cd12a-3261-45d2-a4ee-1b7db746cde7",
+                "role": "owner"
+            }
+        - Response:
+            {
+                "status": "success",
+                "data": {
+                    "uuid": "0876d36e-4ab9-4b19-a8a6-54967f3a0905",
+                    "shareholderId": "0405befe-7339-4e60-9317-c967cedae787",
+                    "accountId": "0d7cd12a-3261-45d2-a4ee-1b7db746cde7",
+                    "role": "owner",
+                    "created_at": "2018-07-27T04:23:45.428Z",
+                    "updated_at": "2018-07-27T06:26:36.181Z",
+                    "deleted_at": null
+                }
+            }
+            
+- Get ShareholderAccount Info
+
+        - Endpoint: /v1/shareholder-account/:uuid
+            :uuid   String
+        - Method: GET
+        - Response:
+            {
+                "status": "success",
+                "data": {
+                    "uuid": "0876d36e-4ab9-4b19-a8a6-54967f3a0905",
+                    "shareholderId": "0405befe-7339-4e60-9317-c967cedae787",
+                    "accountId": "0d7cd12a-3261-45d2-a4ee-1b7db746cde7",
+                    "role": "owner",
+                    "created_at": "2018-07-27T04:23:45.428Z",
+                    "updated_at": "2018-07-27T06:26:36.181Z",
+                    "deleted_at": null
+                }
+            }
+            
+- Delete ShareholderAccount Info
+
+        - Endpoint: /v1/shareholder-account/:uuid
+            :uuid   String
+        - Method: DELETE
+        - Response:
+            {
+                "status": "success"
+            }

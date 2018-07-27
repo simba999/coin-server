@@ -1,17 +1,12 @@
 import { Request, Response } from 'express';
 import * as express from 'express';
 import { boolean, number, object, string } from 'joi';
-import { Sequelize } from 'sequelize-typescript';
 import { errorWrap } from '../utils';
 import validate from '../middleware/validate';
-import { Account } from '../models/account';
 import { Security } from '../models/security';
-import { User } from '../models/user';
 import { SecurityTransaction } from '../models/security_transaction';
 import { Shareholder } from '../models/shareholder';
-import { ShareholderAccount } from '../models/shareholder_account';
 import { notFound } from 'boom';
-import { v4 as uuid } from 'uuid';
 
 const router = express.Router();
 
