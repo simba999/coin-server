@@ -35,7 +35,7 @@ export class Shareholder extends Model<Shareholder> {
     @Column name: string;
 
     @Column({
-        type: DataType.ENUM('employee', 'none_empl_individual', 'none_empl_institution', 'founder', 'board_member')
+        type: DataType.ENUM('individual', 'non-individual')
     })
     type: string;
 

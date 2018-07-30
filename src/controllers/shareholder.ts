@@ -13,8 +13,10 @@ const router = express.Router();
 router.post('/shareholder',
     validate({
         body: object().keys({
-            userId: string().max(255).required(),
+            name: string().max(255).required(),
+            type: string().valid(['individual', 'non-individual']),
             invitedEmail: string().required().email(),
+            address: string().max(255),
         }),
     }),
     errorWrap(async (req: Request, res: Response) => {
@@ -34,7 +36,10 @@ router.put('/shareholder',
     validate({
         body: object().keys({
             shareholderId: string().required(),
-            invitedEmail: string().email().max(255),
+            name: string().max(255),
+            type: string().valid(['individual', 'non-individual']),
+            invitedEmail: string().email(),
+            address: string().max(255),
         }),
     }),
     errorWrap(async (req: Request, res: Response) => {
@@ -43,9 +48,7 @@ router.put('/shareholder',
         const shareholder = await Shareholder.findById(body.shareholderId);
         if (!shareholder) notFound('Shareholder not found');
 
-        if (body.invitedEmail)
-            shareholder.invitedEmail = body.invitedEmail;
-        await shareholder.save();
+        await shareholder.update(body);
 
         res.json({
             status: 'success',

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import * as express from 'express';
-import { object, string } from 'joi';
+import { date, object, string } from 'joi';
 import { errorWrap } from '../utils';
 import validate from '../middleware/validate';
 import { Account } from '../models/account';
@@ -12,8 +12,14 @@ const router = express.Router();
 router.post('/accounts',
     validate({
         body: object().keys({
-            type: string().valid(['company']),
-            name: string().max(255),
+            type: string().valid(['company']).required(),
+            name: string().max(255).required(),
+            incDate: date().required(),
+            website: string(),
+            currency: string().max(255),
+            country: string().max(255).required(),
+            state: string().max(255).required(),
+            funding: string().valid(['Not Raised Any Money', 'Raised Via Notes Only', 'Seed Stage', 'Series A or Later']).required(),
         }),
     }),
     errorWrap(async (req: Request, res: Response) => {
@@ -32,8 +38,14 @@ router.put('/accounts',
     validate({
         body: object().keys({
             accountId: string().required(),
-            type: string().valid(['company']),
-            name: string().max(255),
+            type: string().valid(['company']).required(),
+            name: string().max(255).required(),
+            incDate: date().required(),
+            website: string(),
+            currency: string().max(255),
+            country: string().max(255).required(),
+            state: string().max(255).required(),
+            funding: string().valid(['Not Raised Any Money', 'Raised Via Notes Only', 'Seed Stage', 'Series A or Later']).required()
         }),
     }),
     errorWrap(async (req: Request, res: Response) => {
@@ -42,11 +54,7 @@ router.put('/accounts',
         const account = await Account.findById(body.accountId);
         if (!account) notFound('Account not found');
 
-        if (body.type)
-            account.type = body.type;
-        if (body.name)
-            account.name = body.name;
-        await account.save();
+        await account.update(body);
 
         res.json({
             status: 'success',

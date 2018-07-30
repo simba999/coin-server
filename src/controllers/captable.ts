@@ -30,39 +30,32 @@ router.post('/initialize',
         const body = req.body;
 
         // Create Account with company type
-        const account = new Account();
-        account.type = 'company';
-        account.name = body.companyName;
-        account.country = body.country;
-        account.state = body.state;
-        account.incDate = body.incDate;
-        account.website = body.website;
-        account.currency = body.currency;
-        account.funding = body.funding;
-        await account.save();
+        const account = await Account.create(body);
+        await account.updateAttributes({'name': body.companyName, 'type': 'company'});
 
+        // create securities
         for (const obj of body.securities) {
-            const security = new Security();
-            security.name = obj.name;
-            security.type = obj.type;
-            security.authorized = obj.authorized;
-            security.liquidation = obj.liquidation;
-            security.accountId = account.uuid;
-
-            await security.save();
+            const security = await Security.create(obj);
+            await security.updateAttributes({'accountId': account.uuid});
         }
 
+        // create shareholders
         for (const obj of body.shareholders) {
-            const shareholder = new Shareholder();
-            shareholder.name = obj.name;
-            shareholder.type = obj.type;
-            shareholder.invitedEmail = obj.invitedEmail;
-            shareholder.address = obj.address;
+            const shareholder = await Shareholder.create(obj);
 
-            await shareholder.save();
+            await ShareholderAccount.create({
+                'shareholderId': shareholder.uuid,
+                'accountId': account.uuid,
+                'role': 'employee',
+            });
         }
 
-        res.json(account);
+        res.json({
+            'status': 'success',
+            'data': {
+                'message': 'Created successfully'
+            }
+        });
     }),
 );
 

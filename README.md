@@ -4,7 +4,7 @@
 -----
 
 
-**2. Company**
+**2. Account**
 -----
 
 Company API requires common request header: 
@@ -19,17 +19,29 @@ Company API requires common request header:
         - Request:
             {
                 "type":"company",
-                "name":"Test Company1"
+                "name":"Test Company1",
+                "incDate": "2017/07/30",
+                "website": "http://localhost",
+                "currency": "usd",
+                "country": "united state",
+                "state": "new york",
+                "funding": "Not Raised Any Money"
             }
         - Response:
             {
                 "status": "success",
                 "data": {
-                    "uuid": "0d7cd12a-3261-45d2-a4ee-1b7db746cde7",
+                    "uuid": "bcde20bb-eae2-409f-9f48-3dd46709c191",
                     "type": "company",
                     "name": "Test Company1",
-                    "updated_at": "2018-07-23T17:16:26.141Z",
-                    "created_at": "2018-07-23T17:16:26.141Z",
+                    "incDate": "2017-07-29",
+                    "website": "http://localhost",
+                    "currency": "usd",
+                    "country": "united state",
+                    "state": "new york",
+                    "funding": "Not Raised Any Money",
+                    "updated_at": "2018-07-30T13:42:01.878Z",
+                    "created_at": "2018-07-30T13:42:01.878Z",
                     "deleted_at": null
                 }
             }
@@ -40,19 +52,31 @@ Company API requires common request header:
         - Method: PUT
         - Request:
             {
-                "accountId":"0d7cd12a-3261-45d2-a4ee-1b7db746cde7", 
+                "accountId": "bcde20bb-eae2-409f-9f48-3dd46709c191",
                 "type":"company",
-                "name":"Updated Test Company"
+                "name":"Test Company1",
+                "incDate": "2017/07/30",
+                "website": "http://localhost",
+                "currency": "usd",
+                "country": "united state",
+                "state": "new york",
+                "funding": "Not Raised Any Money"
             }
         - Response:
             {
                 "status": "success",
                 "data": {
-                    "uuid": "0d7cd12a-3261-45d2-a4ee-1b7db746cde7",
+                    "uuid": "bcde20bb-eae2-409f-9f48-3dd46709c191",
                     "type": "company",
                     "name": "Test Company1",
-                    "created_at": "2018-07-23T17:16:26.141Z",
-                    "updated_at": "2018-07-23T17:16:26.141Z",
+                    "incDate": "2017-07-29T22:00:00.000Z",
+                    "website": "http://localhost",
+                    "currency": "usd",
+                    "country": "united state",
+                    "state": "new york",
+                    "funding": "Not Raised Any Money",
+                    "created_at": "2018-07-30T13:42:01.878Z",
+                    "updated_at": "2018-07-30T15:44:12.033Z",
                     "deleted_at": null
                 }
             }
@@ -66,11 +90,17 @@ Company API requires common request header:
             {
                 "status": "success",
                 "data": {
-                    "uuid": "0d7cd12a-3261-45d2-a4ee-1b7db746cde7",
+                    "uuid": "bcde20bb-eae2-409f-9f48-3dd46709c191",
                     "type": "company",
                     "name": "Test Company1",
-                    "created_at": "2018-07-23T17:16:26.141Z",
-                    "updated_at": "2018-07-23T17:16:26.141Z",
+                    "incDate": "2017-07-29",
+                    "website": "http://localhost",
+                    "currency": "usd",
+                    "country": "united state",
+                    "state": "new york",
+                    "funding": "Not Raised Any Money",
+                    "created_at": "2018-07-30T13:42:01.878Z",
+                    "updated_at": "2018-07-30T13:44:12.033Z",
                     "deleted_at": null
                 }
             }
@@ -101,27 +131,22 @@ Security API requires common request header:
             {
                 "type":"warrant",
                 "name":"Security 1",
-                "accountId":"5172e1e8-7c0e-47ee-9fe1-082c619de99f",
-                "securityClass":"Security Class 1",
+                "accountId":"bcde20bb-eae2-409f-9f48-3dd46709c191",
                 "authorized":21,
-                "issued":12000,
-                "tokenized":"Token 1"
+                "liquidation": "liquidation 1"
             }
         - Response:
             {
                 "status": "success",
                 "data": {
-                    "uuid": "ddff62bb-83d6-42c9-81f6-8fcd1b0b0a3d",
+                    "uuid": "26716619-b2a2-4f41-a7b3-e80110292c3d",
                     "type": "warrant",
                     "name": "Security 1",
-                    "accountId": "5172e1e8-7c0e-47ee-9fe1-082c619de99f",
-                    "securityClass": "Security Class 1",
+                    "accountId": "bcde20bb-eae2-409f-9f48-3dd46709c191",
                     "authorized": 21,
-                    "issued": 12000,
-                    "tokenized": "Token 1",
-                    "underlyingSecurity": "76c7e3ff-6bb7-44ea-864f-2109a259233f",
-                    "updated_at": "2018-07-23T19:35:46.106Z",
-                    "created_at": "2018-07-23T19:35:46.106Z",
+                    "liquidation": "liquidation 1",
+                    "updated_at": "2018-07-30T13:47:51.793Z",
+                    "created_at": "2018-07-30T13:47:51.793Z",
                     "deleted_at": null
                 }
             }
@@ -132,33 +157,25 @@ Security API requires common request header:
         - Method: PUT
         - Request:
             {
-                {
-                    "type":"warrant",
-                    "securityId":"ddff62bb-83d6-42c9-81f6-8fcd1b0b0a3d",
-                    "name":"Security 11",
-                    "accountId":"5172e1e8-7c0e-47ee-9fe1-082c619de99f",
-                    "underlyingSecurity":"5172e1e8-7c0e-47ee-9fe1-082c619de99f",
-                    "securityClass":"Security Class 11",
-                    "authorized":21,
-                    "issued":12000,
-                    "tokenized":"Token 11"
-                }
+                "securityId":"26716619-b2a2-4f41-a7b3-e80110292c3d",
+                "type":"warrant",
+                "name":"Security 1",
+                "accountId":"bcde20bb-eae2-409f-9f48-3dd46709c191",
+                "authorized":21,
+                "liquidation": "liquidation 2"
             }
         - Response:
             {
                 "status": "success",
                 "data": {
-                    "uuid": "ddff62bb-83d6-42c9-81f6-8fcd1b0b0a3d",
-                    "name": "Security 11",
+                    "uuid": "26716619-b2a2-4f41-a7b3-e80110292c3d",
+                    "name": "Security 1",
                     "type": "warrant",
-                    "underlyingSecurity": "5172e1e8-7c0e-47ee-9fe1-082c619de99f",
-                    "accountId": "5172e1e8-7c0e-47ee-9fe1-082c619de99f",
-                    "securityClass": "Security Class 11",
                     "authorized": 21,
-                    "issued": 12000,
-                    "tokenized": "Token 11",
-                    "created_at": "2018-07-23T19:35:46.106Z",
-                    "updated_at": "2018-07-25T20:24:38.447Z",
+                    "liquidation": "liquidation 2",
+                    "accountId": "bcde20bb-eae2-409f-9f48-3dd46709c191",
+                    "created_at": "2018-07-30T13:47:51.793Z",
+                    "updated_at": "2018-07-30T15:49:56.457Z",
                     "deleted_at": null
                 }
             }
@@ -172,17 +189,14 @@ Security API requires common request header:
             {
                 "status": "success",
                 "data": {
-                    "uuid": "ddff62bb-83d6-42c9-81f6-8fcd1b0b0a3d",
-                    "name": "Security 11",
+                    "uuid": "26716619-b2a2-4f41-a7b3-e80110292c3d",
+                    "name": "Security 1",
                     "type": "warrant",
-                    "underlyingSecurity": "5172e1e8-7c0e-47ee-9fe1-082c619de99f",
-                    "accountId": "5172e1e8-7c0e-47ee-9fe1-082c619de99f",
-                    "securityClass": "Security Class 11",
                     "authorized": 21,
-                    "issued": 12000,
-                    "tokenized": "Token 11",
-                    "created_at": "2018-07-23T19:35:46.106Z",
-                    "updated_at": "2018-07-25T18:24:38.447Z",
+                    "liquidation": "liquidation 2",
+                    "accountId": "bcde20bb-eae2-409f-9f48-3dd46709c191",
+                    "created_at": "2018-07-30T13:47:51.793Z",
+                    "updated_at": "2018-07-30T15:49:56.457Z",
                     "deleted_at": null
                 }
             }
@@ -210,20 +224,23 @@ Shareholder API requires common request header:
         - Endpoint: /v1/shareholder
         - Method: POST
         - Request:
-            {
-                "userId":"2a235b33-d7c1-48d7-9b84-badf18e125a2",
-                "invitedEmail":"alex@ishu.io"
+            {  
+                "name": "Shareholder 1",
+                "type": "individual",
+                "invitedEmail":"alex@ishu.io",
+                "address": "Address line 1"
             }
         - Response:
             {
                 "status": "success",
                 "data": {
-                    "uuid": "0405befe-7339-4e60-9317-c967cedae787",
-                    "userId": "2a235b33-d7c1-48d7-9b84-badf18e125a2",
+                    "uuid": "6f93c9d4-51a0-497d-9f71-a07961d78e97",
+                    "name": "Shareholder 1",
+                    "type": "individual",
                     "invitedEmail": "alex@ishu.io",
-                    "invitedAt": "2018-07-25",
-                    "updated_at": "2018-07-25T19:18:16.968Z",
-                    "created_at": "2018-07-25T19:18:16.968Z",
+                    "address": "Address line 1",
+                    "updated_at": "2018-07-30T13:52:49.813Z",
+                    "created_at": "2018-07-30T13:52:49.813Z",
                     "deleted_at": null
                 }
             }
@@ -233,21 +250,24 @@ Shareholder API requires common request header:
         - Endpoint: /v1/shareholder
         - Method: PUT
         - Request:
-            {
-                "shareholderId":"0405befe-7339-4e60-9317-c967cedae787",
-                "userId":"2a235b33-d7c1-48d7-9b84-badf18e125a2",
-                "invitedEmail":"alex1@ishu.io"
+            {  
+                "shareholderId": "6f93c9d4-51a0-497d-9f71-a07961d78e97",
+                "name": "Shareholder 3",
+                "type": "individual",
+                "invitedEmail":"alex@ishu.io",
+                "address": "Address line 1"
             }
         - Response:
             {
                 "status": "success",
                 "data": {
-                    "uuid": "0405befe-7339-4e60-9317-c967cedae787",
-                    "userId": "2a235b33-d7c1-48d7-9b84-badf18e125a2",
-                    "invitedAt": "2018-07-25",
-                    "invitedEmail": "alex1@ishu.io",
-                    "created_at": "2018-07-25T19:18:16.968Z",
-                    "updated_at": "2018-07-25T21:33:50.438Z",
+                    "uuid": "6f93c9d4-51a0-497d-9f71-a07961d78e97",
+                    "name": "Shareholder 3",
+                    "type": "individual",
+                    "invitedEmail": "alex@ishu.io",
+                    "address": "Address line 1",
+                    "created_at": "2018-07-30T13:52:49.813Z",
+                    "updated_at": "2018-07-30T15:53:57.932Z",
                     "deleted_at": null
                 }
             }
@@ -261,12 +281,13 @@ Shareholder API requires common request header:
             {
                 "status": "success",
                 "data": {
-                    "uuid": "0405befe-7339-4e60-9317-c967cedae787",
-                    "userId": "2a235b33-d7c1-48d7-9b84-badf18e125a2",
-                    "invitedAt": "2018-07-25",
+                    "uuid": "6f93c9d4-51a0-497d-9f71-a07961d78e97",
+                    "name": "Shareholder 3",
+                    "type": "individual",
                     "invitedEmail": "alex@ishu.io",
-                    "created_at": "2018-07-25T19:18:16.968Z",
-                    "updated_at": "2018-07-25T19:35:36.668Z",
+                    "address": "Address line 1",
+                    "created_at": "2018-07-30T13:52:49.813Z",
+                    "updated_at": "2018-07-30T15:53:57.932Z",
                     "deleted_at": null
                 }
             }
@@ -389,94 +410,8 @@ SecurityTransaction API requires common request header:
             {
                 "status": "success"
             }
-            
-**6. ShareholderAccount API**
------
-
-ShareholderAccount API requires common request header: 
-
-        Content-Type: application/json
-        Authorization: Bearer 'Token'
-        
-- Create ShareholderAccount
-
-        - Endpoint: /v1/shareholder-account
-        - Method: POST
-        - Request:
-            {
-                "shareholderId": "0405befe-7339-4e60-9317-c967cedae787",
-                "accountId": "927f0f63-735e-4739-8be1-ed2d47eb0cad",
-                "role": "owner"
-            }
-        - Response:
-            {
-                "status": "success",
-                "data": {
-                    "uuid": "0876d36e-4ab9-4b19-a8a6-54967f3a0905",
-                    "shareholderId": "0405befe-7339-4e60-9317-c967cedae787",
-                    "accountId": "927f0f63-735e-4739-8be1-ed2d47eb0cad",
-                    "role": "owner",
-                    "updated_at": "2018-07-27T04:23:45.428Z",
-                    "created_at": "2018-07-27T04:23:45.428Z",
-                    "deleted_at": null
-                }
-            }
-            
-- Update ShareholderAccount
-
-        - Endpoint: /v1/shareholder-account
-        - Method: PUT
-        - Request:
-            {
-                "shareholderAccountId": "0876d36e-4ab9-4b19-a8a6-54967f3a0905",
-                "shareholderId": "0405befe-7339-4e60-9317-c967cedae787",
-                "accountId": "0d7cd12a-3261-45d2-a4ee-1b7db746cde7",
-                "role": "owner"
-            }
-        - Response:
-            {
-                "status": "success",
-                "data": {
-                    "uuid": "0876d36e-4ab9-4b19-a8a6-54967f3a0905",
-                    "shareholderId": "0405befe-7339-4e60-9317-c967cedae787",
-                    "accountId": "0d7cd12a-3261-45d2-a4ee-1b7db746cde7",
-                    "role": "owner",
-                    "created_at": "2018-07-27T04:23:45.428Z",
-                    "updated_at": "2018-07-27T06:26:36.181Z",
-                    "deleted_at": null
-                }
-            }
-            
-- Get ShareholderAccount Info
-
-        - Endpoint: /v1/shareholder-account/:uuid
-            :uuid   String
-        - Method: GET
-        - Response:
-            {
-                "status": "success",
-                "data": {
-                    "uuid": "0876d36e-4ab9-4b19-a8a6-54967f3a0905",
-                    "shareholderId": "0405befe-7339-4e60-9317-c967cedae787",
-                    "accountId": "0d7cd12a-3261-45d2-a4ee-1b7db746cde7",
-                    "role": "owner",
-                    "created_at": "2018-07-27T04:23:45.428Z",
-                    "updated_at": "2018-07-27T06:26:36.181Z",
-                    "deleted_at": null
-                }
-            }
-            
-- Delete ShareholderAccount Info
-
-        - Endpoint: /v1/shareholder-account/:uuid
-            :uuid   String
-        - Method: DELETE
-        - Response:
-            {
-                "status": "success"
-            }
-            
-**7. CapTable API**
+                        
+**6. CapTable API**
 -----
 
 CapTable API requires common request header: 
@@ -486,24 +421,51 @@ CapTable API requires common request header:
         
 - Initialize Cap tables data
 
-        - Endpoint: /v1/initialize
+        - Endpoint: /v1/captable/initialize
         - Method: POST
         - Request:
             {
-                "shareholderId": "0405befe-7339-4e60-9317-c967cedae787",
-                "accountId": "927f0f63-735e-4739-8be1-ed2d47eb0cad",
-                "role": "owner"
+                "companyName": "Test Company1",
+                "incDate": "2018/07/28",
+                "website": "https://localhost:5000",
+                "currency": "EUR",
+                "country": "US",
+                "state": "STATE",
+                "funding": "Not Raised Any Money",
+                "role": "owner",
+                "securities": [
+                    {
+                        "type": "warrant",
+                        "name": "class1",
+                        "authorized": 32342,
+                        "liquidation": "liquidation 1"
+                    },
+                    {
+                        "type": "warrant",
+                        "name": "class2",
+                        "authorized": 1232,
+                        "liquidation": "liquidation 2"
+                    }
+                ],
+                "shareholders": [
+                    {
+                        "name": "shareholder 1",
+                        "type": "employee",
+                        "invitedEmail": "sh1@yopmail.com",
+                        "address": "address 1"
+                    },
+                    {
+                        "name": "shareholder 2",
+                        "type": "employee",
+                        "invitedEmail": "sh2@yopmail.com",
+                        "address": "address 2"
+                    }
+                ]
             }
         - Response:
             {
-                "status": "success",
-                "data": {
-                    "uuid": "0876d36e-4ab9-4b19-a8a6-54967f3a0905",
-                    "shareholderId": "0405befe-7339-4e60-9317-c967cedae787",
-                    "accountId": "927f0f63-735e-4739-8be1-ed2d47eb0cad",
-                    "role": "owner",
-                    "updated_at": "2018-07-27T04:23:45.428Z",
-                    "created_at": "2018-07-27T04:23:45.428Z",
-                    "deleted_at": null
+                'status': 'success',
+                'data': {
+                    'message': 'Created successfully'
                 }
             }

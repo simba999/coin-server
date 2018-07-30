@@ -11,7 +11,6 @@ import CaptableController from './controllers/captable';
 import SecurityController from './controllers/security';
 import SecurityTransactionController from './controllers/security_transactions';
 import ShareHolderController from './controllers/shareholder';
-import ShareHolderAccountController from './controllers/shareholder_account';
 import passport from 'passport';
 import passportJwt from 'passport-jwt';
 import { User } from './models/user';
@@ -59,11 +58,10 @@ app.use((req, res, next) => {
 
 app.use('/v1', UserController);
 app.use('/v1', AccountController);
-app.use('/v1', CaptableController);
+app.use('/v1/captable', CaptableController);
 app.use('/v1', SecurityController);
 app.use('/v1', SecurityTransactionController);
 app.use('/v1', ShareHolderController);
-app.use('/v1', ShareHolderAccountController);
 
 app.get('/config', (req, res) => {
     res.json(config);

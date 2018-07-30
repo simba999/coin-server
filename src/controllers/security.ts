@@ -16,12 +16,9 @@ router.post('/security',
         body: object().keys({
             name: string().max(255),
             type: string().valid(['warrant', 'preferred_stock', 'common_stock', 'option']),
-            underlyingSecurity: string().max(255),
-            accountId: string().required(),
-            securityClass: string().max(255),
             authorized: number(),
-            issued: number(),
-            tokenized: string().max(255),
+            liquidation: string().max(255),
+            accountId: string().required(),
         }),
     }),
     errorWrap(async (req: Request, res: Response) => {
@@ -30,8 +27,6 @@ router.post('/security',
         const account = await Account.findById(body.accountId);
         if (!account) notFound('Account not found');
 
-        if (!body.underlyingSecurity)
-            body.underlyingSecurity = uuid();
         const security = await Security.create(body);
 
         res.json({
@@ -48,8 +43,9 @@ router.put('/security',
             securityId: string().required(),
             name: string().max(255),
             type: string().valid(['warrant', 'preferred_stock', 'common_stock', 'option']),
-            accountId: string().max(255),
             authorized: number(),
+            liquidation: string().max(255),
+            accountId: string(),
         }),
     }),
     errorWrap(async (req: Request, res: Response) => {
@@ -63,15 +59,7 @@ router.put('/security',
             if (!account) notFound('Account not found');
         }
 
-        if (body.type)
-            security.type = body.type;
-        if (body.name)
-            security.name = body.name;
-        if (body.accountId)
-            security.accountId = body.accountId;
-        if (body.authorized)
-            security.authorized = body.authorized;
-        await security.save();
+        await security.update(body);
 
         res.json({
             status: 'success',
