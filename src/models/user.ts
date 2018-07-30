@@ -92,7 +92,7 @@ export class User extends Model<User> {
     })
     deletedAt: boolean;
 
-    @HasOne(() => Shareholder) shareholder: Shareholder;
+    // @HasOne(() => Shareholder) shareholder: Shareholder;
     @HasMany(() => BillingSubscription) subscriptions: BillingSubscription;
     @HasMany(() => UserToken) tokens: UserToken;
 

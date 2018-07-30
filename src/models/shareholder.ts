@@ -32,27 +32,21 @@ export class Shareholder extends Model<Shareholder> {
     })
     uuid: string;
 
-    @ForeignKey(() => User)
-    @IsUUID(4)
-    @Column({
-        field: 'user_id',
-        type: DataType.UUID,
-        allowNull: true,
-    })
-    userId: string;
+    @Column name: string;
 
     @Column({
-        type: DataType.DATE,
-        field: 'invited_at',
+        type: DataType.ENUM('employee', 'none_empl_individual', 'none_empl_institution', 'founder', 'board_member')
     })
-    invitedAt: Date;
+    type: string;
 
     @Column({
         field: 'invited_email',
     })
     invitedEmail: string;
 
-    @BelongsTo(() => User) user: User;
+    @Column address: string;
+
+    // @BelongsTo(() => User) user: User;
     @BelongsToMany(() => Account, () => ShareholderAccount) companies: Account[];
-    @HasMany(() => SecurityTransaction) securityTransactions: SecurityTransaction[];
+    // @HasMany(() => SecurityTransaction) securityTransactions: SecurityTransaction[];
 }

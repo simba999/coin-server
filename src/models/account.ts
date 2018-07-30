@@ -25,6 +25,25 @@ export class Account extends Model<Account> {
 
     @Column name: string;
 
+    @Column({
+        type: DataType.DATE,
+        field: 'inc_date',
+    })
+    incDate: Date;
+
+    @Column website: string;
+
+    @Column currency: string;
+
+    @Column country: string;
+
+    @Column state: string;
+
+    @Column({
+        type: DataType.ENUM('Not Raised Any Money', 'Raised Via Notes Only', 'Seed Stage', 'Series A or Later')
+    })
+    funding: string;
+
     @HasMany(() => Security) securities: Security[];
     @BelongsToMany(() => Shareholder, () => ShareholderAccount) shareholder: Shareholder[];
 }

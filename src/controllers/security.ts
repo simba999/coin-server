@@ -48,12 +48,8 @@ router.put('/security',
             securityId: string().required(),
             name: string().max(255),
             type: string().valid(['warrant', 'preferred_stock', 'common_stock', 'option']),
-            underlyingSecurity: string().max(255),
             accountId: string().max(255),
-            securityClass: string().max(255),
             authorized: number(),
-            issued: number(),
-            tokenized: string().max(255),
         }),
     }),
     errorWrap(async (req: Request, res: Response) => {
@@ -71,18 +67,10 @@ router.put('/security',
             security.type = body.type;
         if (body.name)
             security.name = body.name;
-        if (body.underlyingSecurity)
-            security.underlyingSecurity = body.underlyingSecurity;
         if (body.accountId)
             security.accountId = body.accountId;
-        if (body.securityClass)
-            security.securityClass = body.securityClass;
         if (body.authorized)
             security.authorized = body.authorized;
-        if (body.issued)
-            security.issued = body.issued;
-        if (body.tokenized)
-            security.tokenized = body.tokenized;
         await security.save();
 
         res.json({

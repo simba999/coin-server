@@ -20,10 +20,6 @@ router.post('/shareholder',
     errorWrap(async (req: Request, res: Response) => {
         const body = req.body;
 
-        const user = await User.findById(body.userId);
-        if (!user) notFound('User not found');
-
-        body.invitedAt = new Date();
         const shareholder = await Shareholder.create(body);
 
         res.json({
@@ -38,9 +34,7 @@ router.put('/shareholder',
     validate({
         body: object().keys({
             shareholderId: string().required(),
-            userId: string().max(225),
             invitedEmail: string().email().max(255),
-            invitedAt: string().max(255),
         }),
     }),
     errorWrap(async (req: Request, res: Response) => {
@@ -49,12 +43,8 @@ router.put('/shareholder',
         const shareholder = await Shareholder.findById(body.shareholderId);
         if (!shareholder) notFound('Shareholder not found');
 
-        if (body.userId)
-            shareholder.userId = body.userId;
         if (body.invitedEmail)
             shareholder.invitedEmail = body.invitedEmail;
-        if (body.invitedAt)
-            shareholder.invitedAt = body.invitedAt;
         await shareholder.save();
 
         res.json({
