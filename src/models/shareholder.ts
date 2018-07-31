@@ -46,6 +46,18 @@ export class Shareholder extends Model<Shareholder> {
 
     @Column address: string;
 
+    @Column({
+        type: DataType.DATE,
+        field: 'created_at',
+    })
+    createdAt: boolean;
+
+    @Column({
+        type: DataType.DATE,
+        field: 'deleted_at',
+    })
+    deletedAt: boolean;
+
     // @BelongsTo(() => User) user: User;
     @BelongsToMany(() => Account, () => ShareholderAccount) companies: Account[];
     // @HasMany(() => SecurityTransaction) securityTransactions: SecurityTransaction[];

@@ -64,6 +64,18 @@ export class SecurityTransaction extends Model<SecurityTransaction> {
     })
     shareholderId: string;
 
+    @Column({
+        type: DataType.DATE,
+        field: 'created_at',
+    })
+    createdAt: boolean;
+
+    @Column({
+        type: DataType.DATE,
+        field: 'deleted_at',
+    })
+    deletedAt: boolean;
+
     @BelongsTo(() => Security) security: Security;
     @BelongsTo(() => Shareholder) shareholder: Shareholder;
 }

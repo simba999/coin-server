@@ -47,6 +47,18 @@ export class Security extends Model<Security> {
     })
     accountId: string;
 
+    @Column({
+        type: DataType.DATE,
+        field: 'created_at',
+    })
+    createdAt: boolean;
+
+    @Column({
+        type: DataType.DATE,
+        field: 'deleted_at',
+    })
+    deletedAt: boolean;
+
     @BelongsTo(() => Account) account: Account;
     @HasMany(() => SecurityTransaction) securityTransactions: SecurityTransaction[];
 }

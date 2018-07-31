@@ -44,6 +44,18 @@ export class Account extends Model<Account> {
     })
     funding: string;
 
+    @Column({
+        type: DataType.DATE,
+        field: 'created_at',
+    })
+    createdAt: boolean;
+
+    @Column({
+        type: DataType.DATE,
+        field: 'deleted_at',
+    })
+    deletedAt: boolean;
+
     @HasMany(() => Security) securities: Security[];
     @BelongsToMany(() => Shareholder, () => ShareholderAccount) shareholder: Shareholder[];
 }

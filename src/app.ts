@@ -14,6 +14,8 @@ import ShareHolderController from './controllers/shareholder';
 import passport from 'passport';
 import passportJwt from 'passport-jwt';
 import { User } from './models/user';
+import SwaggerJsDoc from 'swagger-jsdoc';
+import SwaggerUI from 'swagger-ui-express';
 
 const config = generateConfig();
 const sequelize = initSequelize(config);
@@ -40,6 +42,38 @@ passport.deserializeUser(function (user, done) {
     done(null, user);
 });
 
+const options = {
+    swaggerDefinition: {
+        host: 'localhost:5000',
+        basePath: '/v1',
+        swagger: '2.0',
+        info: {
+            title: 'ISHU Swagger API Documentation',
+            version: '1.0',
+            description: 'This is Ishu Captable API documentation.',
+            contact: {
+                email: 'alex.vaitkus@ishu.io'
+            }
+        },
+        securityDefinitions: {
+            Bearer: {
+                type: 'apiKey',
+                name: 'Authorization',
+                in: 'header'
+            }
+        }
+    },
+    apis: [
+        './dist/controllers/user.js',
+        './dist/controllers/account.js',
+        './dist/controllers/security.js',
+        './dist/controllers/shareholder.js',
+        './dist/controllers/security_transactions.js',
+        './dist/controllers/captable.js',
+    ]
+};
+const swaggerSpec = SwaggerJsDoc(options);
+
 const app = express();
 
 app.set('port', config.port);
@@ -62,6 +96,12 @@ app.use('/v1/captable', CaptableController);
 app.use('/v1', SecurityController);
 app.use('/v1', SecurityTransactionController);
 app.use('/v1', ShareHolderController);
+
+app.get('/api-docs.json', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(swaggerSpec);
+});
+app.use('/api-docs', SwaggerUI.serve, SwaggerUI.setup(swaggerSpec));
 
 app.get('/config', (req, res) => {
     res.json(config);

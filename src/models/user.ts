@@ -3,7 +3,6 @@ import { methodNotAllowed, notFound, unauthorized } from 'boom';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 
-import { Shareholder } from './shareholder';
 import { UserToken } from './user_token';
 import { BillingSubscription } from './billing_subscription';
 import generateConfig from '../config';
