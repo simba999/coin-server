@@ -1,0 +1,38 @@
+definitions:
+    AccountInfo:
+        type: object
+        required:
+        - type
+        - name
+        - incDate
+        - currency
+        - country
+        - state
+        - funding
+        properties:
+            type:
+                type: string
+                enum: [company]
+                example: company
+            name:
+                type: string
+                example: New Company
+            incDate:
+                type: string
+                example: 2016/08/29
+            website:
+                type: string
+                example: http://ishu.com
+            currency:
+                type: string
+                example: USD
+            country:
+                type: string
+                example: United State
+            state:
+                type: string
+                example: New York
+            funding:
+                type: string
+                enum: [Not Raised Any Money, Raised Via Notes Only, Seed Stage, Series A or Later]
+                example: Not Raised Any Money

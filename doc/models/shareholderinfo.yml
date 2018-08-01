@@ -1,0 +1,23 @@
+definitions:
+    ShareholderInfo:
+        type: object
+        required:
+        - name
+        - type
+        - invitedEmail
+        - address
+        properties:
+            name:
+                type: string
+                example: Shareholder 1
+            type:
+                type: string
+                enum: [individual, non-individual]
+                example: individual
+            invitedEmail:
+                type: string
+                format: email
+                example: shareholder@yopmail.com
+            address:
+                type: string
+                example: new york, united state

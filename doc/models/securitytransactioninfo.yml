@@ -1,0 +1,43 @@
+definitions:
+    SecurityTransactionInfo:
+        type: object
+        required:
+        - status
+        - shares
+        - price
+        - restricted
+        - restrictedUntil
+        - issueDate
+        - securityId
+        - shareholderId
+        properties:
+            status:
+                type: boolean
+                example: false
+            shares:
+                type: number
+                format: int32
+                example: 234.5
+            price:
+                type: number
+                format: int32
+                example: 10.5
+            restricted:
+                type: boolean
+                example: false
+            restrictUntil:
+                type: string
+                format: date
+                example: 2018/09/25
+            issueDate:
+                type: string
+                format: date
+                example: 2018/08/01
+            securityId:
+                type: string
+                format: uuid
+                example: 26716619-b2a2-4f41-a7b3-e80110292c3d
+            shareholderId:
+                type: string
+                format: uuid
+                example: 6f93c9d4-51a0-497d-9f71-a07961d78e97

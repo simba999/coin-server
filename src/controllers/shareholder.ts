@@ -10,76 +10,6 @@ import passport from 'passport';
 
 const router = express.Router();
 
-/**
- * @swagger
- * definitions:
- *   ShareholderInfo:
- *     type: object
- *     required:
- *     - name
- *     - type
- *     - invitedEmail
- *     - address
- *     properties:
- *       name:
- *         type: string
- *         example: Shareholder 1
- *       type:
- *         type: string
- *         enum: [individual, non-individual]
- *         example: individual
- *       invitedEmail:
- *         type: string
- *         format: email
- *         example: shareholder@yopmail.com
- *       address:
- *         type: string
- *         example: new york, united state
- */
-
-/**
- * @swagger
- *   /shareholder:
- *     post:
- *       security:
- *         - Bearer: []
- *       tags:
- *       - Shareholder
- *       operationId: createShareholder
- *       description: Create a shareholder.
- *       consumes:
- *       - application/json
- *       produces:
- *       - application/json
- *       parameters:
- *       - in: body
- *         name: json_data
- *         description: |
- *           Json Data of shareholder to create
- *         schema:
- *           $ref: '#/definitions/ShareholderInfo'
- *       responses:
- *         200:
- *           description: Created shareholder successfully
- *           schema:
- *             type: object
- *             properties:
- *               status:
- *                 type: string
- *                 example: success
- *               data:
- *                 type: object
- *                 properties:
- *                   message:
- *                     type: string
- *                     example: Created shareholder successfully
- *                   uuid:
- *                     type: string
- *                     format: uuid
- *                     example: ddfa7024-812e-4f1f-92be-ab167010549b
- *         400:
- *           description: Invalid input, object invalid
- */
 router.post('/shareholder',
     passport.authenticate('jwt', { session: false }),
     validate({
@@ -99,76 +29,17 @@ router.post('/shareholder',
             status: 'success',
             data: {
                 'message': 'Created shareholder successfully',
-                'uuid': shareholder.uuid
+                'shareholder': {
+                    'name': shareholder.name,
+                    'type': shareholder.type,
+                    'invitedEmail': shareholder.invitedEmail,
+                    'address': shareholder.address,
+                }
             }
         });
     }),
 );
 
-/**
- * @swagger
- *   /shareholder:
- *     put:
- *       security:
- *         - Bearer: []
- *       tags:
- *       - Shareholder
- *       operationId: updateShareholder
- *       description: Update a shareholder information.
- *       consumes:
- *       - application/json
- *       produces:
- *       - application/json
- *       parameters:
- *       - in: body
- *         name: json_data
- *         description: |
- *           Json Data of shareholder to update
- *         schema:
- *           type: object
- *           required:
- *           - shareholderId
- *           properties:
- *             shareholderId:
- *               type: string
- *               format: uuid
- *               example: 6f93c9d4-51a0-497d-9f71-a07961d78e97
- *             name:
- *               type: string
- *               example: Shareholder 1
- *             type:
- *               type: string
- *               enum: [individual, non-individual]
- *               example: individual
- *             invitedEmail:
- *               type: string
- *               format: email
- *               example: shareholder@yopmail.com
- *             address:
- *               type: string
- *               example: new york, united state
- *       responses:
- *         200:
- *           description: Updated shareholder information successfully
- *           schema:
- *             type: object
- *             properties:
- *               status:
- *                 type: string
- *                 example: success
- *               data:
- *                 type: object
- *                 properties:
- *                   message:
- *                     type: string
- *                     example: Updated shareholder successfully
- *                   uuid:
- *                     type: string
- *                     format: uuid
- *                     example: 6f93c9d4-51a0-497d-9f71-a07961d78e97
- *         400:
- *           description: Invalid input, object invalid
- */
 router.put('/shareholder',
     passport.authenticate('jwt', { session: false }),
     validate({
@@ -198,34 +69,6 @@ router.put('/shareholder',
     }),
 );
 
-/**
- * @swagger
- *   /shareholder/{uuid}:
- *     get:
- *       security:
- *         - Bearer: []
- *       tags:
- *       - Shareholder
- *       operationId: getShareholder
- *       description: |
- *         Get the shareholder information
- *       produces:
- *       - application/json
- *       parameters:
- *       - in: path
- *         name: uuid
- *         type: string
- *         format: uuid
- *         required: true
- *         description: Pass search uuid for an unique shareholder
- *       responses:
- *         200:
- *           description: Get shareholder information successfully
- *           schema:
- *             $ref: '#/definitions/ShareholderInfo'
- *         400:
- *           description: Bad input parameter
- */
 router.get('/shareholder/:uuid',
     passport.authenticate('jwt', { session: false }),
     validate({
@@ -243,38 +86,6 @@ router.get('/shareholder/:uuid',
     }),
 );
 
-/**
- * @swagger
- *   /shareholder/{uuid}:
- *     delete:
- *       security:
- *         - Bearer: []
- *       tags:
- *       - Shareholder
- *       operationId: deleteShareholder
- *       description: |
- *         Delete the shareholder information
- *       produces:
- *       - application/json
- *       parameters:
- *       - in: path
- *         name: uuid
- *         type: string
- *         format: uuid
- *         required: true
- *         description: Pass delete uuid for an unique shareholder
- *       responses:
- *         200:
- *           description: Delete shareholder information successfully
- *           schema:
- *             type: object
- *             properties:
- *               status:
- *                 type: string
- *                 example: success
- *         400:
- *           description: Bad input parameter
- */
 router.delete('/shareholder/:uuid',
     passport.authenticate('jwt', { session: false }),
     validate({

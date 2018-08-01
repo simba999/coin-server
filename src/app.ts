@@ -64,12 +64,13 @@ const options = {
         }
     },
     apis: [
-        './dist/controllers/user.js',
-        './dist/controllers/account.js',
-        './dist/controllers/security.js',
-        './dist/controllers/shareholder.js',
-        './dist/controllers/security_transactions.js',
-        './dist/controllers/captable.js',
+        './doc/models/*.yml',
+        './doc/user.yml',
+        './doc/account.yml',
+        './doc/security.yml',
+        './doc/shareholder.yml',
+        './doc/security_transactions.yml',
+        './doc/captable.yml',
     ]
 };
 const swaggerSpec = SwaggerJsDoc(options);

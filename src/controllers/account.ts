@@ -9,91 +9,6 @@ import passport from 'passport';
 
 const router = express.Router();
 
-/**
- * @swagger
- * definitions:
- *   AccountInfo:
- *     type: object
- *     required:
- *     - type
- *     - name
- *     - incDate
- *     - currency
- *     - country
- *     - state
- *     - funding
- *     properties:
- *       type:
- *         type: string
- *         enum: [company]
- *         example: company
- *       name:
- *         type: string
- *         example: New Company
- *       incDate:
- *         type: string
- *         example: 2016/08/29
- *       website:
- *         type: string
- *         example: http://ishu.com
- *       currency:
- *         type: string
- *         example: USD
- *       country:
- *         type: string
- *         example: United State
- *       state:
- *         type: string
- *         example: New York
- *       funding:
- *         type: string
- *         enum: [Not Raised Any Money, Raised Via Notes Only, Seed Stage, Series A or Later]
- *         example: Not Raised Any Money
- */
-
-/**
- * @swagger
- *   /account:
- *     post:
- *       security:
- *         - Bearer: []
- *       tags:
- *       - Account
- *       operationId: createAccount
- *       description: Create an account. For now 'compnay'.
- *       consumes:
- *       - application/json
- *       produces:
- *       - application/json
- *       parameters:
- *       - in: body
- *         name: json_data
- *         description: |
- *           Json Data of account to create
- *         schema:
- *           $ref: '#/definitions/AccountInfo'
- *       responses:
- *         200:
- *           description: Created account successfully
- *           schema:
- *             type: object
- *             properties:
- *               status:
- *                 type: string
- *                 example: success
- *               data:
- *                 type: object
- *                 properties:
- *                   message:
- *                     type: string
- *                     example: Created account successfully
- *                   uuid:
- *                     type: string
- *                     format: uuid
- *                     example: c72b37ed-9582-4120-a062-0065fd7b4ba6
- *         400:
- *           description: Invalid input, object invalid
- */
 router.post('/account',
     passport.authenticate('jwt', { session: false }),
     validate({
@@ -116,87 +31,21 @@ router.post('/account',
             status: 'success',
             data: {
                 'message': 'Created account successfully',
-                'uuid': account.uuid
+                'account': {
+                    'type': account.type,
+                    'name': account.name,
+                    'incDate': account.incDate,
+                    'website': account.website,
+                    'currency': account.currency,
+                    'country': account.country,
+                    'state': account.state,
+                    'funding': account.funding
+                }
             }
         });
     }),
 );
 
-/**
- * @swagger
- *   /account:
- *     put:
- *       security:
- *         - Bearer: []
- *       tags:
- *       - Account
- *       operationId: updateAccount
- *       description: Update an account information.
- *       consumes:
- *       - application/json
- *       produces:
- *       - application/json
- *       parameters:
- *       - in: body
- *         name: json_data
- *         description: |
- *           Json Data of account to update
- *         schema:
- *           type: object
- *           required:
- *           - accountId
- *           properties:
- *             accountId:
- *               type: string
- *               format: uuid
- *               example: 5172e1e8-7c0e-47ee-9fe1-082c619de99f
- *             type:
- *               type: string
- *               enum: [company]
- *               example: company
- *             name:
- *               type: string
- *               example: New Company
- *             incDate:
- *               type: string
- *               example: 2016/08/29
- *             website:
- *               type: string
- *               example: http://ishu.com
- *             currency:
- *               type: string
- *               example: USD
- *             country:
- *               type: string
- *               example: United State
- *             state:
- *               type: string
- *               example: New York
- *             funding:
- *               type: string
- *               example: Not Raised Any Money
- *       responses:
- *         200:
- *           description: Updated account successfully
- *           schema:
- *             type: object
- *             properties:
- *               status:
- *                 type: string
- *                 example: success
- *               data:
- *                 type: object
- *                 properties:
- *                   message:
- *                     type: string
- *                     example: Updated account successfully
- *                   uuid:
- *                     type: string
- *                     format: uuid
- *                     example: 5a269bb3-a851-4d9c-bef3-d9177bd038c7
- *         400:
- *           description: Invalid input, object invalid
- */
 router.put('/account',
     passport.authenticate('jwt', { session: false }),
     validate({
@@ -230,34 +79,6 @@ router.put('/account',
     }),
 );
 
-/**
- * @swagger
- *   /account/{uuid}:
- *     get:
- *       security:
- *         - Bearer: []
- *       tags:
- *       - Account
- *       operationId: getAccount
- *       description: |
- *         Get the account information
- *       produces:
- *       - application/json
- *       parameters:
- *         - in: path
- *           name: uuid
- *           type: string
- *           format: uuid
- *           required: true
- *           description: Pass search uuid for an unique account
- *       responses:
- *         200:
- *           description: Get account information successfully
- *           schema:
- *             $ref: '#/definitions/AccountInfo'
- *         400:
- *           description: Bad input parameter
- */
 router.get('/account/:uuid',
     passport.authenticate('jwt', { session: false }),
     validate({
@@ -275,38 +96,6 @@ router.get('/account/:uuid',
     }),
 );
 
-/**
- * @swagger
- *   /account/{uuid}:
- *     delete:
- *       security:
- *         - Bearer: []
- *       tags:
- *       - Account
- *       operationId: deleteAccount
- *       description: |
- *         Delete the account information
- *       produces:
- *       - application/json
- *       parameters:
- *         - in: path
- *           name: uuid
- *           type: string
- *           format: uuid
- *           required: true
- *           description: Pass delete uuid for an unique account
- *       responses:
- *         200:
- *           description: Delete account information successfully
- *           schema:
- *             type: object
- *             properties:
- *               status:
- *                 type: string
- *                 example: success
- *         400:
- *           description: Bad input parameter
- */
 router.delete('/account/:uuid',
     passport.authenticate('jwt', { session: false }),
     validate({
