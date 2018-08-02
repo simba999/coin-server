@@ -1,9 +1,9 @@
 import 'mocha';
 import request from 'supertest';
 import should from 'should';
-import app from '../app';
-import { User } from '../models/user';
-import { seedDatabase } from '../tests/test.service';
+import app from '../../app';
+import { User } from '../../models/user';
+import { seedDatabase } from '../../tests/test.service';
 
 const PASSWORD = 'Password1#';
 

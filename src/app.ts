@@ -5,17 +5,12 @@ import cors from 'cors';
 import expressValidator from 'express-validator';
 import generateConfig from './config';
 import { initSequelize } from './database';
-import UserController from './controllers/user';
-import AccountController from './controllers/account';
-import CaptableController from './controllers/captable';
-import SecurityController from './controllers/security';
-import SecurityTransactionController from './controllers/security_transactions';
-import ShareHolderController from './controllers/shareholder';
 import passport from 'passport';
 import passportJwt from 'passport-jwt';
 import { User } from './models/user';
 import SwaggerJsDoc from 'swagger-jsdoc';
 import SwaggerUI from 'swagger-ui-express';
+import Routers from './routers';
 
 const config = generateConfig();
 const sequelize = initSequelize(config);
@@ -64,13 +59,12 @@ const options = {
         }
     },
     apis: [
-        './doc/models/*.yml',
-        './doc/user.yml',
-        './doc/account.yml',
-        './doc/security.yml',
-        './doc/shareholder.yml',
-        './doc/security_transactions.yml',
-        './doc/captable.yml',
+        './src/controllers/user/*.ts',
+        './src/controllers/account/*.ts',
+        './src/controllers/security/*.ts',
+        './src/controllers/shareholder/*.ts',
+        './src/controllers/security_transaction/*.ts',
+        './src/controllers/captable/*.ts',
     ]
 };
 const swaggerSpec = SwaggerJsDoc(options);
@@ -86,31 +80,18 @@ app.use(expressValidator());
 app.use(cors({origin: '*'}));
 app.use(passport.initialize());
 
+app.use('/v1', Routers);
+
 app.use((req, res, next) => {
     console.info(`${new Date()}: [${req.method}] ${req.url}`);
     next();
 });
-
-app.use('/v1', UserController);
-app.use('/v1', AccountController);
-app.use('/v1/captable', CaptableController);
-app.use('/v1', SecurityController);
-app.use('/v1', SecurityTransactionController);
-app.use('/v1', ShareHolderController);
 
 app.get('/api-docs.json', (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     res.send(swaggerSpec);
 });
 app.use('/api-docs', SwaggerUI.serve, SwaggerUI.setup(swaggerSpec));
-
-app.get('/config', (req, res) => {
-    res.json(config);
-});
-
-app.get('/ping', (req, res) => {
-    res.sendStatus(204);
-});
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     console.error(`${req.url}: ${err.message}`);
