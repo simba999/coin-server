@@ -2,27 +2,21 @@ import 'mocha';
 import request from 'supertest';
 import should from 'should';
 import app from '../../app';
-import { User } from '../../models/user';
-import { seedDatabase } from '../../tests/test.service';
 
 const PASSWORD = 'Password1#';
 
 describe(`POST /signup`, () => {
-    beforeEach(async () => {
-        await seedDatabase();
-    });
 
-    it(`should return 201 Created' on signup`, () => {
+    it(`should return 200 Created' on signup`, () => {
         return request(app)
             .post('/v1/signup')
             .send({
                 firstName: 'test',
                 lastName: 'test',
                 email: 'test@email.com',
-                phone: '89092345675',
                 password: PASSWORD
             })
-            .expect(201);
+            .expect(200);
     });
 
     it(`should return 400 OK if user with such email already exists`, async () => {
@@ -32,10 +26,9 @@ describe(`POST /signup`, () => {
                 firstName: 'test',
                 lastName: 'test',
                 email: 'duplicate@email.com',
-                phone: '89092345675',
                 password: PASSWORD
             })
-            .expect(201);
+            .expect(200);
 
         const {body} = await request(app)
             .post('/v1/signup')
@@ -51,6 +44,9 @@ describe(`POST /signup`, () => {
         should(body).have.property('error', 'Bad Request');
         should(body).have.property('message', 'User with such email already exists!');
     });
+});
+
+describe('POST /signin', () => {
 
     it(`should return token on login`, async () => {
         await request(app)
@@ -59,34 +55,37 @@ describe(`POST /signup`, () => {
                 firstName: 'test',
                 lastName: 'test',
                 email: 'duplicate@email.com',
-                phone: '89092345675',
                 password: PASSWORD
             })
-            .expect(201);
+            .expect(200);
 
-        await request(app)
-            .post('/v1/login')
+        const {body: { data: {accessToken}}} = await request(app)
+            .post('/v1/signin')
             .send({
                 email: 'duplicate@email.com',
                 password: PASSWORD
             })
             .expect(200);
-    });
 
-    it(`should return current authenticated user`, async () => {
+        should.exist(accessToken);
+    });
+});
+
+describe( 'PUT /user/password', () => {
+
+    it('should update password for authenticated user', async () => {
         await request(app)
             .post('/v1/signup')
             .send({
                 firstName: 'test',
                 lastName: 'test',
                 email: 'duplicate@email.com',
-                phone: '89092345675',
                 password: PASSWORD
             })
-            .expect(201);
+            .expect(200);
 
-        const {body: {accessToken}} = await request(app)
-            .post('/v1/login')
+        const {body: { data: {accessToken}}} = await request(app)
+            .post('/v1/signin')
             .send({
                 email: 'duplicate@email.com',
                 password: PASSWORD
@@ -94,14 +93,14 @@ describe(`POST /signup`, () => {
             .expect(200);
 
         const {body} = await request(app)
-            .get('/v1/me')
+            .put('/v1/user/password')
             .set('Authorization', `Bearer ${accessToken}`)
+            .send({
+                password: 'Password2#',
+                currentPassword: PASSWORD
+            })
             .expect(200);
 
-        should.exist(body.user);
-    });
-
-    it('should patch password for authenticated user', async () => {
-
+        should(body).have.property('status', 'success');
     });
 });

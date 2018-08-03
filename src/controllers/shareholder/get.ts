@@ -5,7 +5,7 @@ import { errorWrap } from '../../utils';
 import validate from '../../middleware/validate';
 import { User } from '../../models/user';
 import { Shareholder } from '../../models/shareholder';
-import { notFound } from 'boom';
+import { badData } from 'boom';
 import passport from 'passport';
 
 const router = express.Router();
@@ -48,7 +48,7 @@ router.get('/shareholder/:uuid',
         const params = req.params;
 
         const shareholder = await Shareholder.findById(params.uuid);
-        if (!shareholder) notFound('Shareholder not found');
+        if (!shareholder) badData('Shareholder not found');
         res.json({
             status: 'success',
             data: shareholder

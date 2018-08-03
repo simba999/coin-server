@@ -5,7 +5,7 @@ import { errorWrap } from '../../utils';
 import validate from '../../middleware/validate';
 import { User } from '../../models/user';
 import { Shareholder } from '../../models/shareholder';
-import { notFound } from 'boom';
+import { badData } from 'boom';
 import passport from 'passport';
 
 const router = express.Router();
@@ -90,7 +90,7 @@ router.put('/shareholder',
         const body = req.body;
 
         const shareholder = await Shareholder.findById(body.shareholderId);
-        if (!shareholder) notFound('Shareholder not found');
+        if (!shareholder) throw badData('Shareholder not found');
 
         await shareholder.update(body);
 

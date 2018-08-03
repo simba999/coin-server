@@ -5,7 +5,7 @@ import { errorWrap } from '../../utils';
 import validate from '../../middleware/validate';
 import { Account } from '../../models/account';
 import { Security } from '../../models/security';
-import { notFound } from 'boom';
+import { badData } from 'boom';
 import { v4 as uuid } from 'uuid';
 import passport from 'passport';
 
@@ -95,11 +95,11 @@ router.put('/security',
         const body = req.body;
 
         const security = await Security.findById(body.securityId);
-        if (!security) notFound('Security not found');
+        if (!security) throw badData('Security not found');
 
         if (body.accountId) {
             const account = await Account.findById(body.accountId);
-            if (!account) notFound('Account not found');
+            if (!account) throw badData('Account not found');
         }
 
         await security.update(body);

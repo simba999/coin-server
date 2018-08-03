@@ -4,7 +4,7 @@ import { date, object, string } from 'joi';
 import { errorWrap } from '../../utils';
 import validate from '../../middleware/validate';
 import { Account } from '../../models/account';
-import { badRequest, notFound } from 'boom';
+import { badData, badRequest } from 'boom';
 import passport from 'passport';
 
 const router = express.Router();
@@ -104,17 +104,18 @@ router.put('/account',
         const body = req.body;
 
         const account = await Account.findById(body.accountId);
-        if (!account) notFound('Account not found');
+        if (!account) throw badData('Account not found');
 
         await account.update(body);
 
-        res.json({
-            status: 'success',
-            data: {
-                'message': 'Updated account successfully',
-                'uuid': account.uuid
-            }
-        });
+        res.status(200)
+            .json({
+                status: 'success',
+                data: {
+                    'message': 'Updated account successfully',
+                    'uuid': account.uuid
+                }
+            });
     }),
 );
 

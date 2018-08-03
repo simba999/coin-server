@@ -97,7 +97,8 @@ router.put('/user/password',
         user.password = body.password;
         await user.save();
 
-        res.json({
+        res.status(200)
+            .json({
             'status': 'success',
             'data': {
                 'message': 'Changed password successfully',

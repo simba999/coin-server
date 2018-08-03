@@ -4,7 +4,7 @@ import { date, object, string } from 'joi';
 import { errorWrap } from '../../utils';
 import validate from '../../middleware/validate';
 import { Account } from '../../models/account';
-import { badRequest, notFound } from 'boom';
+import { badRequest } from 'boom';
 import passport from 'passport';
 
 const router = express.Router();
@@ -76,46 +76,7 @@ const router = express.Router();
  *             200:
  *                 description: Created account successfully
  *                 schema:
- *                     type: object
- *                     properties:
- *                         status:
- *                             type: string
- *                             example: success
- *                         data:
- *                             type: object
- *                             properties:
- *                                 message:
- *                                     type: string
- *                                     example: Created account successfully
- *                                 account:
- *                                     type: object
- *                                     properties:
- *                                         type:
- *                                             type: string
- *                                             enum: [company]
- *                                             example: company
- *                                         name:
- *                                             type: string
- *                                             example: New Company
- *                                         incDate:
- *                                             type: string
- *                                             example: 2016/08/29
- *                                         website:
- *                                             type: string
- *                                             example: http://ishu.com
- *                                         currency:
- *                                             type: string
- *                                             example: USD
- *                                         country:
- *                                             type: string
- *                                             example: United State
- *                                         state:
- *                                             type: string
- *                                             example: New York
- *                                         funding:
- *                                             type: string
- *                                             enum: [Not Raised Any Money, Raised Via Notes Only, Seed Stage, Series A or Later]
- *                                             example: Not Raised Any Money
+ *                     $ref: '#/definitions/AccountInfo'
  *             400:
  *                 description: Invalid input, object invalid
  */
@@ -138,22 +99,14 @@ router.post('/account',
         const body = req.body;
 
         const account = await Account.create(body);
-        res.json({
-            status: 'success',
-            data: {
-                'message': 'Created account successfully',
-                'account': {
-                    'type': account.type,
-                    'name': account.name,
-                    'incDate': account.incDate,
-                    'website': account.website,
-                    'currency': account.currency,
-                    'country': account.country,
-                    'state': account.state,
-                    'funding': account.funding
+        res.status(200)
+            .json({
+                status: 'success',
+                data: {
+                    'message': 'Created account successfully',
+                    account
                 }
-            }
-        });
+            });
     }),
 );
 

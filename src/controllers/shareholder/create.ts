@@ -3,9 +3,7 @@ import * as express from 'express';
 import { object, string } from 'joi';
 import { errorWrap } from '../../utils';
 import validate from '../../middleware/validate';
-import { User } from '../../models/user';
 import { Shareholder } from '../../models/shareholder';
-import { notFound } from 'boom';
 import passport from 'passport';
 
 const router = express.Router();
@@ -62,39 +60,7 @@ const router = express.Router();
  *             200:
  *                 description: Created shareholder successfully
  *                 schema:
- *                     type: object
- *                     properties:
- *                         status:
- *                             type: string
- *                             example: success
- *                         data:
- *                             type: object
- *                             properties:
- *                                 message:
- *                                     type: string
- *                                     example: Created shareholder successfully
- *                                 shareholder:
- *                                     type: object
- *                                     required:
- *                                     - name
- *                                     - type
- *                                     - invitedEmail
- *                                     - address
- *                                     properties:
- *                                         name:
- *                                             type: string
- *                                             example: Shareholder 1
- *                                         type:
- *                                             type: string
- *                                             enum: [individual, non-individual]
- *                                             example: individual
- *                                         invitedEmail:
- *                                             type: string
- *                                             format: email
- *                                             example: shareholder@yopmail.com
- *                                         address:
- *                                             type: string
- *                                             example: new york, united state
+ *                     $ref: '#/definitions/ShareholderInfo'
  *             400:
  *                 description: Invalid input, object invalid
  */
@@ -118,12 +84,7 @@ router.post('/shareholder',
             status: 'success',
             data: {
                 'message': 'Created shareholder successfully',
-                'shareholder': {
-                    'name': shareholder.name,
-                    'type': shareholder.type,
-                    'invitedEmail': shareholder.invitedEmail,
-                    'address': shareholder.address,
-                }
+                shareholder
             }
         });
     }),

@@ -82,7 +82,8 @@ router.post('/signin',
 
         const token = await user.generateToken();
 
-        res.json({
+        res.status(200)
+            .json({
             'status': 'success',
             'data': token
         });

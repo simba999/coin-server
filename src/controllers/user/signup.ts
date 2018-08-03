@@ -113,7 +113,8 @@ router.post('/signup',
         body.emailConfirmed = true; // temp
         const user = await User.create(body);
 
-        res.status(201).json({
+        res.status(200)
+            .json({
             'status': 'success',
             'data': {
                 'message': 'Created user successfully',

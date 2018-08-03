@@ -5,7 +5,7 @@ import { errorWrap } from '../../utils';
 import validate from '../../middleware/validate';
 import { Account } from '../../models/account';
 import { Security } from '../../models/security';
-import { notFound } from 'boom';
+import { badData } from 'boom';
 import { v4 as uuid } from 'uuid';
 import passport from 'passport';
 
@@ -49,7 +49,7 @@ router.get('/security/:uuid',
         const params = req.params;
 
         const security = await Security.findById(params.uuid);
-        if (!security) notFound('Security not found');
+        if (!security) badData('Security not found');
         res.json({
             status: 'success',
             data: security
