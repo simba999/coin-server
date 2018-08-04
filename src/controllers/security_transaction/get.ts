@@ -6,7 +6,7 @@ import validate from '../../middleware/validate';
 import { Security } from '../../models/security';
 import { SecurityTransaction } from '../../models/security_transaction';
 import { Shareholder } from '../../models/shareholder';
-import { notFound } from 'boom';
+import { badData } from 'boom';
 import passport from 'passport';
 
 const router = express.Router();
@@ -49,7 +49,7 @@ router.get('/security-transaction/:uuid',
         const params = req.params;
 
         const securityTransaction = await SecurityTransaction.findById(params.uuid);
-        if (!securityTransaction) notFound('SecurityTransaction not found');
+        if (!securityTransaction) throw badData('SecurityTransaction not found');
 
         res.json({
             status: 'success',

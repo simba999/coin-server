@@ -6,7 +6,7 @@ import validate from '../../middleware/validate';
 import { Security } from '../../models/security';
 import { SecurityTransaction } from '../../models/security_transaction';
 import { Shareholder } from '../../models/shareholder';
-import { notFound } from 'boom';
+import { badData } from 'boom';
 import passport from 'passport';
 
 const router = express.Router();
@@ -40,7 +40,7 @@ const router = express.Router();
  *             restricted:
  *                 type: boolean
  *                 example: false
- *             restrictUntil:
+ *             restrictedUntil:
  *                 type: string
  *                 format: date
  *                 example: 2018/09/25
@@ -107,11 +107,11 @@ router.post('/security-transaction',
 
         if (body.securityId) {
             const security = await Security.findById(body.securityId);
-            if (!security) notFound('Security not found');
+            if (!security) throw badData('Security not found');
         }
         if (body.shareholderId) {
             const shareholder = await Shareholder.findById(body.shareholderId);
-            if (!shareholder) notFound('Shareholder not found');
+            if (!shareholder) throw badData('Shareholder not found');
         }
 
         const securityTransaction = await SecurityTransaction.create(body);

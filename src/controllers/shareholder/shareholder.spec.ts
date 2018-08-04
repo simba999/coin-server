@@ -101,7 +101,7 @@ describe('PUT /shareholder', () => {
         should(body).have.property('message', 'Shareholder not found');
     });
 
-    it(`should return 200 OK if security created`, async () => {
+    it(`should return 200 OK if shareholder updated`, async () => {
 
         const {body: {data: { shareholder }}} = await request(app)
             .post('/v1/shareholder')

@@ -52,6 +52,6 @@ router.use('/', SignUp);
 router.use('/', SignIn);
 router.use('/', ChangePassword);
 
-router.use('/', InitializeCaptable);
+router.use('/captable', InitializeCaptable);
 
 export default router;
