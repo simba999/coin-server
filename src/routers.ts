@@ -9,6 +9,7 @@ import CreateSecurity from './controllers/security/create';
 import UpdateSecurity from './controllers/security/update';
 import GetSecurity from './controllers/security/get';
 import DeleteSecurity from './controllers/security/delete';
+import ListSecurity from './controllers/security/list';
 
 import CreateSecurityTransaction from './controllers/security_transaction/create';
 import UpdateSecurityTransaction from './controllers/security_transaction/update';
@@ -37,6 +38,7 @@ router.use('/', CreateSecurity);
 router.use('/', UpdateSecurity);
 router.use('/', GetSecurity);
 router.use('/', DeleteSecurity);
+router.use('/', ListSecurity);
 
 router.use('/', CreateSecurityTransaction);
 router.use('/', UpdateSecurityTransaction);

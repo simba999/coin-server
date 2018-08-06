@@ -2,6 +2,7 @@ import 'mocha';
 import request from 'supertest';
 import should from 'should';
 import app from '../../app';
+import faker from 'faker';
 
 const PASSWORD = 'Password2#';
 const EMAIL = 'duplicate@email.com';
@@ -28,10 +29,10 @@ describe(`POST /shareholder`, () => {
         await request(app)
             .post('/v1/shareholder')
             .send({
-                name: 'Shareholder 1',
+                name: faker.random.word(),
                 type: 'individual',
-                invitedEmail: 'shareholder@yopmail.com',
-                address: 'new york, united state'
+                invitedEmail: faker.random.word() + '@yopmail.com',
+                address: faker.address.secondaryAddress()
             })
             .expect(401);
     });
@@ -42,10 +43,10 @@ describe(`POST /shareholder`, () => {
             .post('/v1/shareholder')
             .set('Authorization', `Bearer ${accessToken}`)
             .send({
-                name: 'Shareholder 1',
+                name: faker.random.word(),
                 type: 'individual',
-                invitedEmail: 'shareholder@yopmail.com',
-                address: 'new york, united state'
+                invitedEmail: faker.random.word() + '@yopmail.com',
+                address: faker.address.secondaryAddress()
             })
             .expect(200);
 
@@ -76,10 +77,10 @@ describe('PUT /shareholder', () => {
             .put('/v1/shareholder')
             .send({
                 shareholderId: 'dcfa41cc-ba5c-45c6-a196-0481376c3172',
-                name: 'Shareholder 1',
+                name: faker.random.word(),
                 type: 'individual',
-                invitedEmail: 'shareholder@yopmail.com',
-                address: 'new york, united state'
+                invitedEmail: faker.random.word() + '@yopmail.com',
+                address: faker.address.secondaryAddress()
             })
             .expect(401);
     });
@@ -91,10 +92,10 @@ describe('PUT /shareholder', () => {
             .set('Authorization', `Bearer ${accessToken}`)
             .send({
                 shareholderId: 'dcfa41cc-ba5c-45c6-a196-0481376c3172',
-                name: 'Shareholder 1',
+                name: faker.random.word(),
                 type: 'individual',
-                invitedEmail: 'shareholder@yopmail.com',
-                address: 'new york, united state'
+                invitedEmail: faker.random.word() + '@yopmail.com',
+                address: faker.address.secondaryAddress()
             })
             .expect(422);
 
@@ -107,10 +108,10 @@ describe('PUT /shareholder', () => {
             .post('/v1/shareholder')
             .set('Authorization', `Bearer ${accessToken}`)
             .send({
-                name: 'Shareholder 1',
+                name: faker.random.word(),
                 type: 'individual',
-                invitedEmail: 'shareholder@yopmail.com',
-                address: 'new york, united state'
+                invitedEmail: faker.random.word() + '@yopmail.com',
+                address: faker.address.secondaryAddress()
             })
             .expect(200);
 
@@ -119,10 +120,10 @@ describe('PUT /shareholder', () => {
             .set('Authorization', `Bearer ${accessToken}`)
             .send({
                 shareholderId: shareholder.uuid,
-                name: 'Shareholder 2',
+                name: faker.random.word(),
                 type: 'individual',
-                invitedEmail: 'shareholder@yopmail.com',
-                address: 'new york, united state'
+                invitedEmail: faker.random.word() + '@yopmail.com',
+                address: faker.address.secondaryAddress()
             })
             .expect(200);
 
@@ -160,10 +161,10 @@ describe('GET /shareholder/{uuid}', () => {
             .post('/v1/shareholder')
             .set('Authorization', `Bearer ${accessToken}`)
             .send({
-                name: 'Shareholder 1',
+                name: faker.random.word(),
                 type: 'individual',
-                invitedEmail: 'shareholder@yopmail.com',
-                address: 'new york, united state'
+                invitedEmail: faker.random.word() + '@yopmail.com',
+                address: faker.address.secondaryAddress()
             })
             .expect(200);
 
@@ -206,10 +207,10 @@ describe('DELETE /shareholder/{uuid}', () => {
             .post('/v1/shareholder')
             .set('Authorization', `Bearer ${accessToken}`)
             .send({
-                name: 'Shareholder 1',
+                name: faker.random.word(),
                 type: 'individual',
-                invitedEmail: 'shareholder@yopmail.com',
-                address: 'new york, united state'
+                invitedEmail: faker.random.word() + '@yopmail.com',
+                address: faker.address.secondaryAddress()
             })
             .expect(200);
 

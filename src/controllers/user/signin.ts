@@ -74,7 +74,7 @@ router.post('/signin',
     errorWrap(async (req: Request, res: Response) => {
         const body = req.body;
 
-        const user: User = await User.findOne({where: {email: body.email}});
+        const user: User = await User.findOne({where: {email: body.email.toLowerCase()}});
         if (!user) throw notFound('User not found!');
 
         if (!user.emailConfirmed) throw methodNotAllowed('Email is not confirmed. You should confirm email first');

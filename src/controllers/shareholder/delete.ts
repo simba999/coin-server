@@ -52,7 +52,7 @@ router.delete('/shareholder/:uuid',
         const params = req.params;
 
         const shareholder = await Shareholder.findById(params.uuid);
-        if (!shareholder) badData('Shareholder not found');
+        if (!shareholder) throw badData('Shareholder not found');
         await shareholder.destroy();
 
         res.json({

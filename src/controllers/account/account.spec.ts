@@ -2,6 +2,7 @@ import 'mocha';
 import request from 'supertest';
 import should from 'should';
 import app from '../../app';
+import faker from 'faker';
 
 const PASSWORD = 'Password2#';
 const EMAIL = 'duplicate@email.com';
@@ -29,13 +30,13 @@ describe(`POST /account`, () => {
             .post('/v1/account')
             .send({
                 type: 'company',
-                name: 'New Company',
-                incDate: '2016/08/29',
+                name: faker.company.companyName(),
+                incDate: faker.date.future(),
                 funding: 'Not Raised Any Money',
-                website: 'http://ishu.com',
-                currency: 'USD',
-                country: 'United State',
-                state: 'New York'
+                website: faker.internet.domainName(),
+                currency: faker.finance.currencyCode(),
+                country: faker.address.country(),
+                state: faker.address.state()
             })
             .expect(401);
     });
@@ -47,13 +48,13 @@ describe(`POST /account`, () => {
             .set('Authorization', `Bearer ${accessToken}`)
             .send({
                 type: 'company',
-                name: 'New Company',
-                incDate: '2016/08/29',
+                name: faker.company.companyName(),
+                incDate: faker.date.future(),
                 funding: 'Not Raised Any Money',
-                website: 'http://ishu.com',
-                currency: 'USD',
-                country: 'United State',
-                state: 'New York'
+                website: faker.internet.domainName(),
+                currency: faker.finance.currencyCode(),
+                country: faker.address.country(),
+                state: faker.address.state()
             })
             .expect(200);
 
@@ -85,13 +86,13 @@ describe('PUT /account', () => {
             .send({
                 accountId: '',
                 type: 'company',
-                name: 'New Company',
-                incDate: '2016/08/29',
+                name: faker.company.companyName(),
+                incDate: faker.date.future(),
                 funding: 'Not Raised Any Money',
-                website: 'http://ishu.com',
-                currency: 'USD',
-                country: 'United State',
-                state: 'New York'
+                website: faker.internet.domainName(),
+                currency: faker.finance.currencyCode(),
+                country: faker.address.country(),
+                state: faker.address.state()
             })
             .expect(401);
     });
@@ -104,13 +105,13 @@ describe('PUT /account', () => {
             .send({
                 accountId: 'c53e7be6-9ccb-41c9-bf1b-1a387e97fc72',
                 type: 'company',
-                name: 'New Company',
-                incDate: '2016/08/29',
+                name: faker.company.companyName(),
+                incDate: faker.date.future(),
                 funding: 'Not Raised Any Money',
-                website: 'http://ishu.com',
-                currency: 'USD',
-                country: 'United State',
-                state: 'New York'
+                website: faker.internet.domainName(),
+                currency: faker.finance.currencyCode(),
+                country: faker.address.country(),
+                state: faker.address.state()
             })
             .expect(422);
 
@@ -124,13 +125,13 @@ describe('PUT /account', () => {
             .set('Authorization', `Bearer ${accessToken}`)
             .send({
                 type: 'company',
-                name: 'New Company',
-                incDate: '2016/08/29',
+                name: faker.company.companyName(),
+                incDate: faker.date.future(),
                 funding: 'Not Raised Any Money',
-                website: 'http://ishu.com',
-                currency: 'USD',
-                country: 'United State',
-                state: 'New York'
+                website: faker.internet.domainName(),
+                currency: faker.finance.currencyCode(),
+                country: faker.address.country(),
+                state: faker.address.state()
             })
             .expect(200);
 
@@ -140,13 +141,13 @@ describe('PUT /account', () => {
             .send({
                 accountId: account.uuid,
                 type: 'company',
-                name: 'New Company',
-                incDate: '2016/08/29',
+                name: faker.company.companyName(),
+                incDate: faker.date.future(),
                 funding: 'Not Raised Any Money',
-                website: 'http://ishu.com',
-                currency: 'USD',
-                country: 'United State',
-                state: 'New York'
+                website: faker.internet.domainName(),
+                currency: faker.finance.currencyCode(),
+                country: faker.address.country(),
+                state: faker.address.state()
             })
             .expect(200);
 
@@ -185,13 +186,13 @@ describe('GET /account/{uuid}', () => {
             .set('Authorization', `Bearer ${accessToken}`)
             .send({
                 type: 'company',
-                name: 'New Company',
-                incDate: '2016/08/29',
+                name: faker.company.companyName(),
+                incDate: faker.date.future(),
                 funding: 'Not Raised Any Money',
-                website: 'http://ishu.com',
-                currency: 'USD',
-                country: 'United State',
-                state: 'New York'
+                website: faker.internet.domainName(),
+                currency: faker.finance.currencyCode(),
+                country: faker.address.country(),
+                state: faker.address.state()
             })
             .expect(200);
 
@@ -235,13 +236,13 @@ describe('DELETE /account/{uuid}', () => {
             .set('Authorization', `Bearer ${accessToken}`)
             .send({
                 type: 'company',
-                name: 'New Company',
-                incDate: '2016/08/29',
+                name: faker.company.companyName(),
+                incDate: faker.date.future(),
                 funding: 'Not Raised Any Money',
-                website: 'http://ishu.com',
-                currency: 'USD',
-                country: 'United State',
-                state: 'New York'
+                website: faker.internet.domainName(),
+                currency: faker.finance.currencyCode(),
+                country: faker.address.country(),
+                state: faker.address.state()
             })
             .expect(200);
 

@@ -2,6 +2,7 @@ import 'mocha';
 import request from 'supertest';
 import should from 'should';
 import app from '../../app';
+import faker from 'faker';
 
 const PASSWORD = 'Password1#';
 
@@ -11,21 +12,22 @@ describe(`POST /signup`, () => {
         return request(app)
             .post('/v1/signup')
             .send({
-                firstName: 'test',
-                lastName: 'test',
-                email: 'test@email.com',
+                firstName: faker.name.firstName(),
+                lastName: faker.name.lastName(),
+                email: faker.random.word() + '@yopmail.com',
                 password: PASSWORD
             })
             .expect(200);
     });
 
     it(`should return 400 OK if user with such email already exists`, async () => {
+        const email = faker.random.word() + '@yopmail.com';
         await request(app)
             .post('/v1/signup')
             .send({
-                firstName: 'test',
-                lastName: 'test',
-                email: 'duplicate@email.com',
+                firstName: faker.name.firstName(),
+                lastName: faker.name.lastName(),
+                email: email,
                 password: PASSWORD
             })
             .expect(200);
@@ -33,10 +35,9 @@ describe(`POST /signup`, () => {
         const {body} = await request(app)
             .post('/v1/signup')
             .send({
-                firstName: 'test',
-                lastName: 'test',
-                email: 'duplicate@email.com',
-                phone: '89092345675',
+                firstName: faker.name.firstName(),
+                lastName: faker.name.lastName(),
+                email: email,
                 password: PASSWORD
             })
             .expect(400);
@@ -49,12 +50,13 @@ describe(`POST /signup`, () => {
 describe('POST /signin', () => {
 
     it(`should return token on login`, async () => {
+        const email = faker.random.word() + '@yopmail.com';
         await request(app)
             .post('/v1/signup')
             .send({
-                firstName: 'test',
-                lastName: 'test',
-                email: 'duplicate@email.com',
+                firstName: faker.name.firstName(),
+                lastName: faker.name.lastName(),
+                email: email,
                 password: PASSWORD
             })
             .expect(200);
@@ -62,7 +64,7 @@ describe('POST /signin', () => {
         const {body: { data: {accessToken}}} = await request(app)
             .post('/v1/signin')
             .send({
-                email: 'duplicate@email.com',
+                email: email,
                 password: PASSWORD
             })
             .expect(200);
@@ -74,12 +76,13 @@ describe('POST /signin', () => {
 describe( 'PUT /user/password', () => {
 
     it('should update password for authenticated user', async () => {
+        const email = faker.random.word() + '@yopmail.com';
         await request(app)
             .post('/v1/signup')
             .send({
-                firstName: 'test',
-                lastName: 'test',
-                email: 'duplicate@email.com',
+                firstName: faker.name.firstName(),
+                lastName: faker.name.lastName(),
+                email: email,
                 password: PASSWORD
             })
             .expect(200);
@@ -87,7 +90,7 @@ describe( 'PUT /user/password', () => {
         const {body: { data: {accessToken}}} = await request(app)
             .post('/v1/signin')
             .send({
-                email: 'duplicate@email.com',
+                email: email,
                 password: PASSWORD
             })
             .expect(200);

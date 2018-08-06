@@ -49,7 +49,7 @@ router.get('/security/:uuid',
         const params = req.params;
 
         const security = await Security.findById(params.uuid);
-        if (!security) badData('Security not found');
+        if (!security) throw badData('Security not found');
         res.json({
             status: 'success',
             data: security

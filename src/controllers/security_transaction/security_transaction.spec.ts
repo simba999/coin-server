@@ -2,6 +2,7 @@ import 'mocha';
 import request from 'supertest';
 import should from 'should';
 import app from '../../app';
+import faker from 'faker';
 
 const PASSWORD = 'Password2#';
 const EMAIL = 'duplicate@email.com';
@@ -28,12 +29,12 @@ describe(`POST /security-transaction`, () => {
         await request(app)
             .post('/v1/security-transaction')
             .send({
-                status: false,
-                shares: 234.5,
-                price: 10.5,
-                restricted: false,
-                restrictedUntil: '2018/09/25',
-                issueDate: '2018/08/01',
+                status: faker.random.boolean(),
+                shares: faker.finance.amount(),
+                price: faker.finance.amount(),
+                restricted: faker.random.boolean(),
+                restrictedUntil: faker.date.future(),
+                issueDate: faker.date.past(),
                 securityId: '26716619-b2a2-4f41-a7b3-e80110292c3d',
                 shareholderId: '6f93c9d4-51a0-497d-9f71-a07961d78e97'
             })
@@ -47,13 +48,13 @@ describe(`POST /security-transaction`, () => {
             .set('Authorization', `Bearer ${accessToken}`)
             .send({
                 type: 'company',
-                name: 'New Company',
-                incDate: '2016/08/29',
+                name: faker.company.companyName(),
+                incDate: faker.date.future(),
                 funding: 'Not Raised Any Money',
-                website: 'http://ishu.com',
-                currency: 'USD',
-                country: 'United State',
-                state: 'New York'
+                website: faker.internet.domainName(),
+                currency: faker.finance.currencyCode(),
+                country: faker.address.country(),
+                state: faker.address.state()
             })
             .expect(200);
 
@@ -62,9 +63,9 @@ describe(`POST /security-transaction`, () => {
             .set('Authorization', `Bearer ${accessToken}`)
             .send({
                 type: 'preferred_stock',
-                name: 'Security 1',
-                authorized: 21,
-                liquidation: 'liquidation 1',
+                name: faker.commerce.department(),
+                authorized: faker.finance.amount(0.1, 100),
+                liquidation: faker.finance.accountName(),
                 accountId: account.uuid
             })
             .expect(200);
@@ -73,10 +74,10 @@ describe(`POST /security-transaction`, () => {
             .post('/v1/shareholder')
             .set('Authorization', `Bearer ${accessToken}`)
             .send({
-                name: 'Shareholder 1',
+                name: faker.random.word(),
                 type: 'individual',
-                invitedEmail: 'shareholder@yopmail.com',
-                address: 'new york, united state'
+                invitedEmail: faker.random.word() + '@yopmail.com',
+                address: faker.address.secondaryAddress()
             })
             .expect(200);
 
@@ -84,12 +85,12 @@ describe(`POST /security-transaction`, () => {
             .post('/v1/security-transaction')
             .set('Authorization', `Bearer ${accessToken}`)
             .send({
-                status: false,
-                shares: 234.5,
-                price: 10.5,
-                restricted: false,
-                restrictedUntil: '2018/09/25',
-                issueDate: '2018/08/01',
+                status: faker.random.boolean(),
+                shares: faker.finance.amount(),
+                price: faker.finance.amount(),
+                restricted: faker.random.boolean(),
+                restrictedUntil: faker.date.future(),
+                issueDate: faker.date.past(),
                 securityId: security.uuid,
                 shareholderId: shareholder.uuid
             })
@@ -122,12 +123,12 @@ describe('PUT /security-transaction', () => {
             .put('/v1/security-transaction')
             .send({
                 securityTransactionId: '2218f615-975b-463c-a6db-85ef8e6464d0',
-                status: false,
-                shares: 234.5,
-                price: 10.5,
-                restricted: false,
-                restrictedUntil: '2018/09/25',
-                issueDate: '2018/08/01',
+                status: faker.random.boolean(),
+                shares: faker.finance.amount(),
+                price: faker.finance.amount(),
+                restricted: faker.random.boolean(),
+                restrictedUntil: faker.date.future(),
+                issueDate: faker.date.past(),
                 securityId: '26716619-b2a2-4f41-a7b3-e80110292c3d',
                 shareholderId: '6f93c9d4-51a0-497d-9f71-a07961d78e97'
             })
@@ -141,12 +142,12 @@ describe('PUT /security-transaction', () => {
             .set('Authorization', `Bearer ${accessToken}`)
             .send({
                 securityTransactionId: '2218f615-975b-463c-a6db-85ef8e6464dd',
-                status: false,
-                shares: 234.5,
-                price: 10.5,
-                restricted: false,
-                restrictedUntil: '2018/09/25',
-                issueDate: '2018/08/01',
+                status: faker.random.boolean(),
+                shares: faker.finance.amount(),
+                price: faker.finance.amount(),
+                restricted: faker.random.boolean(),
+                restrictedUntil: faker.date.future(),
+                issueDate: faker.date.past(),
                 securityId: '26716619-b2a2-4f41-a7b3-e80110292c3d',
                 shareholderId: '6f93c9d4-51a0-497d-9f71-a07961d78e97'
             })
@@ -162,13 +163,13 @@ describe('PUT /security-transaction', () => {
             .set('Authorization', `Bearer ${accessToken}`)
             .send({
                 type: 'company',
-                name: 'New Company',
-                incDate: '2016/08/29',
+                name: faker.company.companyName(),
+                incDate: faker.date.future(),
                 funding: 'Not Raised Any Money',
-                website: 'http://ishu.com',
-                currency: 'USD',
-                country: 'United State',
-                state: 'New York'
+                website: faker.internet.domainName(),
+                currency: faker.finance.currencyCode(),
+                country: faker.address.country(),
+                state: faker.address.state()
             })
             .expect(200);
 
@@ -177,9 +178,9 @@ describe('PUT /security-transaction', () => {
             .set('Authorization', `Bearer ${accessToken}`)
             .send({
                 type: 'preferred_stock',
-                name: 'Security 1',
-                authorized: 21,
-                liquidation: 'liquidation 1',
+                name: faker.commerce.department(),
+                authorized: faker.finance.amount(0.1, 100),
+                liquidation: faker.finance.accountName(),
                 accountId: account.uuid
             })
             .expect(200);
@@ -188,10 +189,10 @@ describe('PUT /security-transaction', () => {
             .post('/v1/shareholder')
             .set('Authorization', `Bearer ${accessToken}`)
             .send({
-                name: 'Shareholder 1',
+                name: faker.random.word(),
                 type: 'individual',
-                invitedEmail: 'shareholder@yopmail.com',
-                address: 'new york, united state'
+                invitedEmail: faker.random.word() + '@yopmail.com',
+                address: faker.address.secondaryAddress()
             })
             .expect(200);
 
@@ -199,12 +200,12 @@ describe('PUT /security-transaction', () => {
             .post('/v1/security-transaction')
             .set('Authorization', `Bearer ${accessToken}`)
             .send({
-                status: false,
-                shares: 234.5,
-                price: 10.5,
-                restricted: false,
-                restrictedUntil: '2018/09/25',
-                issueDate: '2018/08/01',
+                status: faker.random.boolean(),
+                shares: faker.finance.amount(),
+                price: faker.finance.amount(),
+                restricted: faker.random.boolean(),
+                restrictedUntil: faker.date.future(),
+                issueDate: faker.date.past(),
                 securityId: security.uuid,
                 shareholderId: shareholder.uuid
             })
@@ -215,12 +216,12 @@ describe('PUT /security-transaction', () => {
             .set('Authorization', `Bearer ${accessToken}`)
             .send({
                 securityTransactionId: securityTransaction.uuid,
-                status: false,
-                shares: 234.5,
-                price: 10.5,
-                restricted: false,
-                restrictedUntil: '2018/09/25',
-                issueDate: '2018/08/01',
+                status: faker.random.boolean(),
+                shares: faker.finance.amount(),
+                price: faker.finance.amount(),
+                restricted: faker.random.boolean(),
+                restrictedUntil: faker.date.future(),
+                issueDate: faker.date.past(),
                 securityId: security.uuid,
                 shareholderId: shareholder.uuid
             })
@@ -261,13 +262,13 @@ describe('GET /security-transaction/{uuid}', () => {
             .set('Authorization', `Bearer ${accessToken}`)
             .send({
                 type: 'company',
-                name: 'New Company',
-                incDate: '2016/08/29',
+                name: faker.company.companyName(),
+                incDate: faker.date.future(),
                 funding: 'Not Raised Any Money',
-                website: 'http://ishu.com',
-                currency: 'USD',
-                country: 'United State',
-                state: 'New York'
+                website: faker.internet.domainName(),
+                currency: faker.finance.currencyCode(),
+                country: faker.address.country(),
+                state: faker.address.state()
             })
             .expect(200);
 
@@ -276,9 +277,9 @@ describe('GET /security-transaction/{uuid}', () => {
             .set('Authorization', `Bearer ${accessToken}`)
             .send({
                 type: 'preferred_stock',
-                name: 'Security 1',
-                authorized: 21,
-                liquidation: 'liquidation 1',
+                name: faker.commerce.department(),
+                authorized: faker.finance.amount(0.1, 100),
+                liquidation: faker.finance.accountName(),
                 accountId: account.uuid
             })
             .expect(200);
@@ -287,10 +288,10 @@ describe('GET /security-transaction/{uuid}', () => {
             .post('/v1/shareholder')
             .set('Authorization', `Bearer ${accessToken}`)
             .send({
-                name: 'Shareholder 1',
+                name: faker.random.word(),
                 type: 'individual',
-                invitedEmail: 'shareholder@yopmail.com',
-                address: 'new york, united state'
+                invitedEmail: faker.random.word() + '@yopmail.com',
+                address: faker.address.secondaryAddress()
             })
             .expect(200);
 
@@ -298,12 +299,12 @@ describe('GET /security-transaction/{uuid}', () => {
             .post('/v1/security-transaction')
             .set('Authorization', `Bearer ${accessToken}`)
             .send({
-                status: false,
-                shares: 234.5,
-                price: 10.5,
-                restricted: false,
-                restrictedUntil: '2018/09/25',
-                issueDate: '2018/08/01',
+                status: faker.random.boolean(),
+                shares: faker.finance.amount(),
+                price: faker.finance.amount(),
+                restricted: faker.random.boolean(),
+                restrictedUntil: faker.date.future(),
+                issueDate: faker.date.past(),
                 securityId: security.uuid,
                 shareholderId: shareholder.uuid
             })
@@ -349,13 +350,13 @@ describe('DELETE /security-transaction/{uuid}', () => {
             .set('Authorization', `Bearer ${accessToken}`)
             .send({
                 type: 'company',
-                name: 'New Company',
-                incDate: '2016/08/29',
+                name: faker.company.companyName(),
+                incDate: faker.date.future(),
                 funding: 'Not Raised Any Money',
-                website: 'http://ishu.com',
-                currency: 'USD',
-                country: 'United State',
-                state: 'New York'
+                website: faker.internet.domainName(),
+                currency: faker.finance.currencyCode(),
+                country: faker.address.country(),
+                state: faker.address.state()
             })
             .expect(200);
 
@@ -364,9 +365,9 @@ describe('DELETE /security-transaction/{uuid}', () => {
             .set('Authorization', `Bearer ${accessToken}`)
             .send({
                 type: 'preferred_stock',
-                name: 'Security 1',
-                authorized: 21,
-                liquidation: 'liquidation 1',
+                name: faker.commerce.department(),
+                authorized: faker.finance.amount(0.1, 100),
+                liquidation: faker.finance.accountName(),
                 accountId: account.uuid
             })
             .expect(200);
@@ -375,10 +376,10 @@ describe('DELETE /security-transaction/{uuid}', () => {
             .post('/v1/shareholder')
             .set('Authorization', `Bearer ${accessToken}`)
             .send({
-                name: 'Shareholder 1',
+                name: faker.random.word(),
                 type: 'individual',
-                invitedEmail: 'shareholder@yopmail.com',
-                address: 'new york, united state'
+                invitedEmail: faker.random.word() + '@yopmail.com',
+                address: faker.address.secondaryAddress()
             })
             .expect(200);
 
@@ -386,12 +387,12 @@ describe('DELETE /security-transaction/{uuid}', () => {
             .post('/v1/security-transaction')
             .set('Authorization', `Bearer ${accessToken}`)
             .send({
-                status: false,
-                shares: 234.5,
-                price: 10.5,
-                restricted: false,
-                restrictedUntil: '2018/09/25',
-                issueDate: '2018/08/01',
+                status: faker.random.boolean(),
+                shares: faker.finance.amount(),
+                price: faker.finance.amount(),
+                restricted: faker.random.boolean(),
+                restrictedUntil: faker.date.future(),
+                issueDate: faker.date.past(),
                 securityId: security.uuid,
                 shareholderId: shareholder.uuid
             })

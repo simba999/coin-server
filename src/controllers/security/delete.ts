@@ -53,7 +53,7 @@ router.delete('/security/:uuid',
         const params = req.params;
 
         const security = await Security.findById(params.uuid);
-        if (!security) badData('Security not found');
+        if (!security) throw badData('Security not found');
         await security.destroy();
 
         res.json({
