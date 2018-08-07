@@ -20,6 +20,7 @@ import CreateShareholder from './controllers/shareholder/create';
 import UpdateShareholder from './controllers/shareholder/update';
 import GetShareholder from './controllers/shareholder/get';
 import DeleteShareholder from './controllers/shareholder/delete';
+import InviteShareholder from './controllers/shareholder/invite';
 
 import SignUp from './controllers/user/signup';
 import SignIn from './controllers/user/signin';
@@ -49,6 +50,7 @@ router.use('/', CreateShareholder);
 router.use('/', UpdateShareholder);
 router.use('/', GetShareholder);
 router.use('/', DeleteShareholder);
+router.use('/', InviteShareholder);
 
 router.use('/', SignUp);
 router.use('/', SignIn);

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import * as express from 'express';
 import { object, string } from 'joi';
-import { errorWrap } from '../../utils';
+import { errorWrap, sendInvitationMail } from '../../utils';
 import validate from '../../middleware/validate';
 import { Shareholder } from '../../models/shareholder';
 import passport from 'passport';
@@ -76,7 +76,7 @@ router.post('/shareholder/invite',
     errorWrap(async (req: Request, res: Response) => {
         const body = req.body;
 
-        
+        sendInvitationMail(body.invitedEmail);
     }),
 );
 
