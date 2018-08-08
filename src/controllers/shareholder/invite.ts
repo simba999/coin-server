@@ -5,36 +5,10 @@ import { errorWrap, sendInvitationMail } from '../../utils';
 import validate from '../../middleware/validate';
 import { Shareholder } from '../../models/shareholder';
 import passport from 'passport';
-import NodeMailer from 'nodemailer';
+import crypto from 'crypto';
+import { badData, badRequest } from 'boom';
 
 const router = express.Router();
-
-/**
- * @swagger
- * definitions:
- *     ShareholderInfo:
- *         type: object
- *         required:
- *         - name
- *         - type
- *         - invitedEmail
- *         - address
- *         properties:
- *             name:
- *                 type: string
- *                 example: Shareholder 1
- *             type:
- *                 type: string
- *                 enum: [individual, non-individual]
- *                 example: individual
- *             invitedEmail:
- *                 type: string
- *                 format: email
- *                 example: shareholder@yopmail.com
- *             address:
- *                 type: string
- *                 example: new york, united state
- */
 
 /**
  * @swagger
@@ -44,8 +18,8 @@ const router = express.Router();
  *         - Bearer: []
  *         tags:
  *         - Shareholder
- *         operationId: createShareholder
- *         description: Create a shareholder.
+ *         operationId: inviteShareholder
+ *         description: Invite a shareholder to Ishu.
  *         consumes:
  *         - application/json
  *         produces:
@@ -56,12 +30,36 @@ const router = express.Router();
  *           description: |
  *               Json Data of shareholder to create
  *           schema:
- *               $ref: '#/definitions/ShareholderInfo'
+ *               type: object
+ *               required:
+ *               - shareholderId
+ *               properties:
+ *                   shareholderId:
+ *                       type: string
+ *                       format: uuid
+ *                       example: 6f93c9d4-51a0-497d-9f71-a07961d78e97
+ *                   invitedEmail:
+ *                       type: string
+ *                       format: email
+ *                       example: shareholder@yopmail.com
  *         responses:
  *             200:
  *                 description: Created shareholder successfully
  *                 schema:
- *                     $ref: '#/definitions/ShareholderInfo'
+ *                     type: object
+ *                     properties:
+ *                         status:
+ *                             type: string
+ *                             example: success
+ *                         data:
+ *                             type: object
+ *                             properties:
+ *                                 message:
+ *                                     type: string
+ *                                     example: Invited shareholder successfully
+ *                                 inviteToken:
+ *                                     type: string
+ *                                     example: 6a2da20943931e9834fc12cfe5bb47bbd9ae43489a30726962b576f4e3993e50
  *             400:
  *                 description: Invalid input, object invalid
  */
@@ -70,13 +68,42 @@ router.post('/shareholder/invite',
     passport.authenticate('jwt', { session: false }),
     validate({
         body: object().keys({
+            shareholderId: string().required().uuid(),
             invitedEmail: string().required().email(),
         }),
     }),
     errorWrap(async (req: Request, res: Response) => {
         const body = req.body;
 
-        sendInvitationMail(body.invitedEmail);
+        const shareholder = await Shareholder.findById(body.shareholderId);
+        if (!shareholder) throw badData('Shareholder not found');
+
+        if (shareholder.inviteToken == 'Invited')
+            throw badRequest('Shareholder is already invited to Ishu');
+
+        const hash = crypto.createHash('sha256');
+        hash.update(new Date().toISOString() + body.invitedEmail + 'ISHU');
+        const token = hash.digest('hex');
+
+        await shareholder.update({
+            inviteToken: token,
+            invitedEmail: body.invitedEmail
+        });
+
+        sendInvitationMail(
+            body.invitedEmail,
+            'Hello, You\'re invited to ISHU! Your invite link is ' +
+                process.env.URL + '/shareholder/invite-accept/' + token +
+                ' Thanks.'
+        );
+
+        res.json({
+            status: 'success',
+            data: {
+                message: 'Invited shareholder successfully',
+                inviteToken: token
+            }
+        });
     }),
 );
 

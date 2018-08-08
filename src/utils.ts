@@ -1,7 +1,4 @@
 import NodeMailer from 'nodemailer';
-import dotenv from 'dotenv';
-
-dotenv.config({path: '.env'});
 
 export function errorWrap(handler: any) {
     return function (...args: any[]) {
@@ -9,26 +6,26 @@ export function errorWrap(handler: any) {
     };
 }
 
-export function sendInvitationMail(to: string) {
+export function sendInvitationMail(to: string, message: string) {
 
     const mailConfig: object = {
-        host: process.env.SMTP,
+        host: process.env.SMTP_HOST,
         port: process.env.SMTP_PORT,
-        secure: process.env.SECURE,
+        secure: false,
         auth: {
-            user: process.env.USERNAME,
-            pass: process.env.PASSWORD
+            user: process.env.SMTP_USERNAME,
+            pass: process.env.SMTP_PASSWORD
         }
     };
     const transporter = NodeMailer.createTransport(mailConfig);
 
     // setup email data with unicode symbols
     const mailOptions = {
-        from: '"Alex Vaitkus 👻" <alex.vaitkus@ishu.io>', // sender address
-        to: to, // list of receivers
-        subject: 'Hello ✔', // Subject line
-        text: 'Hello world?', // plain text body
-        html: '<b>Hello world?</b>' // html body
+        from: '"Alex Vaitkus 👻" <alex.vaitkus@gmx.li>',
+        to: to,
+        subject: 'Hello ✔',
+        text: message,
+        html: '<div>' + message + '</div>'
     };
 
     // send mail with defined transport object

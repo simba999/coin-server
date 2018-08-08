@@ -33,6 +33,13 @@ const router = express.Router();
  *             address:
  *                 type: string
  *                 example: new york, united state
+ *             userId:
+ *                 type: string
+ *                 format: uuid
+ *                 example: 6f93c9d4-51a0-497d-9f71-a07961d78e97
+ *             inviteToken:
+ *                 type: string
+ *                 example: 6a2da20943931e9834fc12cfe5bb47bbd9ae43489a30726962b576f4e3993e50
  */
 
 /**

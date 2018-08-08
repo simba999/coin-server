@@ -46,6 +46,20 @@ export class Shareholder extends Model<Shareholder> {
 
     @Column address: string;
 
+    @ForeignKey(() => User)
+    @IsUUID(4)
+    @Column({
+        field: 'user_id',
+        type: DataType.UUID,
+        defaultValue: DataType.UUIDV4,
+    })
+    userId: string;
+
+    @Column({
+        field: 'invite_token',
+    })
+    inviteToken: string;
+
     @Column({
         type: DataType.DATE,
         field: 'created_at',
@@ -58,7 +72,7 @@ export class Shareholder extends Model<Shareholder> {
     })
     deletedAt: boolean;
 
-    // @BelongsTo(() => User) user: User;
+    @BelongsTo(() => User) user: User;
     @BelongsToMany(() => Account, () => ShareholderAccount) companies: Account[];
     // @HasMany(() => SecurityTransaction) securityTransactions: SecurityTransaction[];
 }

@@ -11,6 +11,9 @@ import { User } from './models/user';
 import SwaggerJsDoc from 'swagger-jsdoc';
 import SwaggerUI from 'swagger-ui-express';
 import Routers from './routers';
+import dotenv from 'dotenv';
+
+dotenv.config({path: '.env'});
 
 const config = generateConfig();
 const sequelize = initSequelize(config);

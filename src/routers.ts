@@ -21,6 +21,7 @@ import UpdateShareholder from './controllers/shareholder/update';
 import GetShareholder from './controllers/shareholder/get';
 import DeleteShareholder from './controllers/shareholder/delete';
 import InviteShareholder from './controllers/shareholder/invite';
+import InviteAcceptShareholder from './controllers/shareholder/invite_accept';
 
 import SignUp from './controllers/user/signup';
 import SignIn from './controllers/user/signin';
@@ -51,6 +52,7 @@ router.use('/', UpdateShareholder);
 router.use('/', GetShareholder);
 router.use('/', DeleteShareholder);
 router.use('/', InviteShareholder);
+router.use('/', InviteAcceptShareholder);
 
 router.use('/', SignUp);
 router.use('/', SignIn);

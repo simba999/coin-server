@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 
 import { UserToken } from './user_token';
 import { BillingSubscription } from './billing_subscription';
+import { Shareholder } from './shareholder';
 import generateConfig from '../config';
 
 export const PASSWORD_REGEX = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[$&+,:;=?@#|'<>.^*()%!-]).{6,}$/;
@@ -91,7 +92,7 @@ export class User extends Model<User> {
     })
     deletedAt: boolean;
 
-    // @HasOne(() => Shareholder) shareholder: Shareholder;
+    @HasOne(() => Shareholder) shareholder: Shareholder;
     @HasMany(() => BillingSubscription) subscriptions: BillingSubscription;
     @HasMany(() => UserToken) tokens: UserToken;
 
