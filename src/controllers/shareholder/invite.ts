@@ -78,8 +78,8 @@ router.post('/shareholder/invite',
         const shareholder = await Shareholder.findById(body.shareholderId);
         if (!shareholder) throw badData('Shareholder not found');
 
-        if (shareholder.inviteToken == 'Invited')
-            throw badRequest('Shareholder is already invited to Ishu');
+        if (shareholder.inviteToken != null)
+            throw badData('Shareholder is already invited to Ishu');
 
         const hash = crypto.createHash('sha256');
         hash.update(new Date().toISOString() + body.invitedEmail + 'ISHU');

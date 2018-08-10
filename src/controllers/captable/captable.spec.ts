@@ -6,7 +6,7 @@ import app from '../../app';
 const PASSWORD = 'Password2#';
 const EMAIL = 'duplicate@email.com';
 
-describe(`POST /initialize`, () => {
+describe(`POST /captable/initialize`, () => {
 
     let accessToken: string;
 
@@ -26,7 +26,7 @@ describe(`POST /initialize`, () => {
 
     it (`should return 401 Unauthorized if not signin`, async () => {
         await request(app)
-            .post('/v1/initialize')
+            .post('/v1/captable/initialize')
             .send({
                 name: 'Company Name',
                 incDate: '2018/08/01',
