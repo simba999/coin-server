@@ -1,4 +1,14 @@
-import { Table, Column, Model, DataType, BelongsToMany, HasMany, PrimaryKey, IsUUID } from 'sequelize-typescript';
+import {
+    Table,
+    Column,
+    Model,
+    DataType,
+    BelongsToMany,
+    HasMany,
+    PrimaryKey,
+    IsUUID,
+    BelongsTo
+} from 'sequelize-typescript';
 import { Security } from './security';
 import { UserAccount } from './user_account';
 import { Shareholder } from './shareholder';
@@ -62,5 +72,5 @@ export class Account extends Model<Account> {
     deletedAt: boolean;
 
     @HasMany(() => Security) securities: Security[];
-    @BelongsToMany(() => Shareholder, () => UserAccount) shareholder: Shareholder[];
+    @HasMany(() => UserAccount) userAccounts: UserAccount[];
 }

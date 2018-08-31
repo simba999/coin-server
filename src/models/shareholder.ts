@@ -3,17 +3,13 @@ import {
     Column,
     Model,
     DataType,
-    HasMany,
     BelongsTo,
     ForeignKey,
-    BelongsToMany,
     PrimaryKey, IsUUID
 } from 'sequelize-typescript';
 import { methodNotAllowed, notFound, unauthorized } from 'boom';
 import { SecurityTransaction } from './security_transaction';
 import { User } from './user';
-import { Account } from './account';
-import { UserAccount } from './user_account';
 
 @Table({
     tableName: 'shareholders',
@@ -73,6 +69,5 @@ export class Shareholder extends Model<Shareholder> {
     deletedAt: boolean;
 
     @BelongsTo(() => User) user: User;
-    @BelongsToMany(() => Account, () => UserAccount) companies: Account[];
     // @HasMany(() => SecurityTransaction) securityTransactions: SecurityTransaction[];
 }
