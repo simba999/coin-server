@@ -4,7 +4,7 @@ import { Sequelize } from 'sequelize-typescript';
 import { User } from './models/user';
 import { Account } from './models/account';
 import { Shareholder } from './models/shareholder';
-import { ShareholderAccount } from './models/shareholder_account';
+import { UserAccount } from './models/user_account';
 import { Security } from './models/security';
 import { SecurityTransaction } from './models/security_transaction';
 import { UserToken } from './models/user_token';
@@ -35,7 +35,7 @@ export async function initSequelize(config: any) {
         UserToken,
         Account,
         Shareholder,
-        ShareholderAccount,
+        UserAccount,
         Security,
         SecurityTransaction,
         BillingPlan,

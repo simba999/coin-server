@@ -3,6 +3,7 @@ import request from 'supertest';
 import should from 'should';
 import app from '../../app';
 import faker from 'faker';
+import { string } from 'joi';
 
 const PASSWORD = 'Password1#';
 
@@ -15,7 +16,11 @@ describe(`POST /signup`, () => {
                 firstName: faker.name.firstName(),
                 lastName: faker.name.lastName(),
                 email: faker.random.word() + '@yopmail.com',
-                password: PASSWORD
+                password: PASSWORD,
+                accountType: 'issuer',
+                title: 'CEO',
+                company: faker.company.companyName(),
+                companyType: 'LLC'
             })
             .expect(200);
     });
@@ -28,7 +33,11 @@ describe(`POST /signup`, () => {
                 firstName: faker.name.firstName(),
                 lastName: faker.name.lastName(),
                 email: email,
-                password: PASSWORD
+                password: PASSWORD,
+                accountType: 'issuer',
+                title: 'CEO',
+                company: faker.company.companyName(),
+                companyType: 'LLC'
             })
             .expect(200);
 

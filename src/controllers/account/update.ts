@@ -62,6 +62,9 @@ const router = express.Router();
  *                   funding:
  *                       type: string
  *                       example: Not Raised Any Money
+ *                   companyType:
+ *                       type: string
+ *                       example: LLC
  *         responses:
  *             200:
  *                 description: Updated account successfully
@@ -97,7 +100,8 @@ router.put('/account',
             currency: string().max(255),
             country: string().max(255).required(),
             state: string().max(255).required(),
-            funding: string().valid(['Not Raised Any Money', 'Raised Via Notes Only', 'Seed Stage', 'Series A or Later']).required()
+            funding: string().valid(['Not Raised Any Money', 'Raised Via Notes Only', 'Seed Stage', 'Series A or Later']).required(),
+            companyType: string(),
         }),
     }),
     errorWrap(async (req: Request, res: Response) => {

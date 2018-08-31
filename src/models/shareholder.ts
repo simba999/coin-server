@@ -13,7 +13,7 @@ import { methodNotAllowed, notFound, unauthorized } from 'boom';
 import { SecurityTransaction } from './security_transaction';
 import { User } from './user';
 import { Account } from './account';
-import { ShareholderAccount } from './shareholder_account';
+import { UserAccount } from './user_account';
 
 @Table({
     tableName: 'shareholders',
@@ -73,6 +73,6 @@ export class Shareholder extends Model<Shareholder> {
     deletedAt: boolean;
 
     @BelongsTo(() => User) user: User;
-    @BelongsToMany(() => Account, () => ShareholderAccount) companies: Account[];
+    @BelongsToMany(() => Account, () => UserAccount) companies: Account[];
     // @HasMany(() => SecurityTransaction) securityTransactions: SecurityTransaction[];
 }

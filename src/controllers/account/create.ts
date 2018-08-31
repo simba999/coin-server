@@ -49,6 +49,9 @@ const router = express.Router();
  *                 type: string
  *                 enum: [Not Raised Any Money, Raised Via Notes Only, Seed Stage, Series A or Later]
  *                 example: Not Raised Any Money
+ *             companyType:
+ *                 type: string
+ *                 example: LLC
  */
 
 /**
@@ -93,6 +96,7 @@ router.post('/account',
             country: string().max(255).required(),
             state: string().max(255).required(),
             funding: string().valid(['Not Raised Any Money', 'Raised Via Notes Only', 'Seed Stage', 'Series A or Later']).required(),
+            companyType: string(),
         }),
     }),
     errorWrap(async (req: Request, res: Response) => {

@@ -1,14 +1,14 @@
-import { Table, Column, Model, DataType, ForeignKey, IsUUID, PrimaryKey } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, ForeignKey, IsUUID, PrimaryKey, BelongsTo } from 'sequelize-typescript';
 import { Account } from './account';
-import { Shareholder } from './shareholder';
+import { User } from './user';
 
 @Table({
-    tableName: 'shareholders_accounts',
+    tableName: 'user_accounts',
     underscored: true,
     timestamps: true,
     paranoid: true,
 })
-export class ShareholderAccount extends Model<ShareholderAccount> {
+export class UserAccount extends Model<UserAccount> {
     @PrimaryKey
     @IsUUID(4)
     @Column({
@@ -17,14 +17,14 @@ export class ShareholderAccount extends Model<ShareholderAccount> {
     })
     uuid: string;
 
-    @ForeignKey(() => Shareholder)
+    @ForeignKey(() => User)
     @IsUUID(4)
     @Column({
-        field: 'shareholder_id',
+        field: 'user_id',
         type: DataType.UUID,
         defaultValue: DataType.UUIDV4,
     })
-    shareholderId: string;
+    userId: string;
 
     @ForeignKey(() => Account)
     @IsUUID(4)
@@ -36,7 +36,10 @@ export class ShareholderAccount extends Model<ShareholderAccount> {
     accountId: string;
 
     @Column({
-        type: DataType.ENUM('owner', 'employee', 'shareholder')
+        type: DataType.ENUM('owner', 'employee', 'shareholder', 'issuer')
     })
     role: string;
+
+    @BelongsTo(() => User) user: User;
+    @BelongsTo(() => Account) account: Account;
 }

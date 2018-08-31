@@ -6,7 +6,7 @@ import validate from '../../middleware/validate';
 import { Account } from '../../models/account';
 import { Security } from '../../models/security';
 import { Shareholder } from '../../models/shareholder';
-import { ShareholderAccount } from '../../models/shareholder_account';
+import { UserAccount } from '../../models/user_account';
 import passport from 'passport';
 
 const router = express.Router();
@@ -161,7 +161,7 @@ router.post('/initialize',
         for (const obj of body.shareholders) {
             const shareholder = await Shareholder.create(obj);
 
-            await ShareholderAccount.create({
+            await UserAccount.create({
                 'shareholderId': shareholder.uuid,
                 'accountId': account.uuid,
                 'role': 'employee',

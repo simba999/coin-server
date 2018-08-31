@@ -1,6 +1,6 @@
 import { Table, Column, Model, DataType, BelongsToMany, HasMany, PrimaryKey, IsUUID } from 'sequelize-typescript';
 import { Security } from './security';
-import { ShareholderAccount } from './shareholder_account';
+import { UserAccount } from './user_account';
 import { Shareholder } from './shareholder';
 
 @Table({
@@ -40,6 +40,11 @@ export class Account extends Model<Account> {
     @Column state: string;
 
     @Column({
+        field: 'company_type',
+    })
+    companyType: string;
+
+    @Column({
         type: DataType.ENUM('Not Raised Any Money', 'Raised Via Notes Only', 'Seed Stage', 'Series A or Later')
     })
     funding: string;
@@ -57,5 +62,5 @@ export class Account extends Model<Account> {
     deletedAt: boolean;
 
     @HasMany(() => Security) securities: Security[];
-    @BelongsToMany(() => Shareholder, () => ShareholderAccount) shareholder: Shareholder[];
+    @BelongsToMany(() => Shareholder, () => UserAccount) shareholder: Shareholder[];
 }
