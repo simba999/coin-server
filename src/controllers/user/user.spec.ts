@@ -47,7 +47,11 @@ describe(`POST /signup`, () => {
                 firstName: faker.name.firstName(),
                 lastName: faker.name.lastName(),
                 email: email,
-                password: PASSWORD
+                password: PASSWORD,
+                accountType: 'issuer',
+                title: 'CEO',
+                company: faker.company.companyName(),
+                companyType: 'LLC'
             })
             .expect(400);
 
@@ -66,7 +70,8 @@ describe('POST /signin', () => {
                 firstName: faker.name.firstName(),
                 lastName: faker.name.lastName(),
                 email: email,
-                password: PASSWORD
+                password: PASSWORD,
+                accountType: 'shareholder',
             })
             .expect(200);
 
@@ -92,7 +97,8 @@ describe( 'PUT /user/password', () => {
                 firstName: faker.name.firstName(),
                 lastName: faker.name.lastName(),
                 email: email,
-                password: PASSWORD
+                password: PASSWORD,
+                accountType: 'shareholder',
             })
             .expect(200);
 

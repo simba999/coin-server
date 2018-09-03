@@ -4,8 +4,8 @@ import should from 'should';
 import app from '../../app';
 import faker from 'faker';
 
-const PASSWORD = 'Password2#';
-const EMAIL = 'duplicate@email.com';
+const PASSWORD = 'Password1#';
+const EMAIL = 'alarm@yopmail.com';
 
 describe(`POST /account`, () => {
 
@@ -15,7 +15,7 @@ describe(`POST /account`, () => {
         request(app)
             .post('/v1/signin')
             .send({
-                email: 'duplicate@email.com',
+                email: EMAIL,
                 password: PASSWORD
             })
             .end((err, res) => {
@@ -36,7 +36,8 @@ describe(`POST /account`, () => {
                 website: faker.internet.domainName(),
                 currency: faker.finance.currencyCode(),
                 country: faker.address.country(),
-                state: faker.address.state()
+                state: faker.address.state(),
+                companyType: 'LLC',
             })
             .expect(401);
     });
@@ -54,7 +55,8 @@ describe(`POST /account`, () => {
                 website: faker.internet.domainName(),
                 currency: faker.finance.currencyCode(),
                 country: faker.address.country(),
-                state: faker.address.state()
+                state: faker.address.state(),
+                companyType: 'LLC',
             })
             .expect(200);
 
@@ -70,7 +72,7 @@ describe('PUT /account', () => {
         request(app)
             .post('/v1/signin')
             .send({
-                email: 'duplicate@email.com',
+                email: EMAIL,
                 password: PASSWORD
             })
             .end((err, res) => {
@@ -111,7 +113,8 @@ describe('PUT /account', () => {
                 website: faker.internet.domainName(),
                 currency: faker.finance.currencyCode(),
                 country: faker.address.country(),
-                state: faker.address.state()
+                state: faker.address.state(),
+                companyType: 'LLC',
             })
             .expect(422);
 
@@ -147,7 +150,8 @@ describe('PUT /account', () => {
                 website: faker.internet.domainName(),
                 currency: faker.finance.currencyCode(),
                 country: faker.address.country(),
-                state: faker.address.state()
+                state: faker.address.state(),
+                companyType: 'LLC',
             })
             .expect(200);
 
@@ -163,7 +167,7 @@ describe('GET /account/{uuid}', () => {
         request(app)
             .post('/v1/signin')
             .send({
-                email: 'duplicate@email.com',
+                email: EMAIL,
                 password: PASSWORD
             })
             .end((err, res) => {
@@ -192,7 +196,8 @@ describe('GET /account/{uuid}', () => {
                 website: faker.internet.domainName(),
                 currency: faker.finance.currencyCode(),
                 country: faker.address.country(),
-                state: faker.address.state()
+                state: faker.address.state(),
+                companyType: 'LLC',
             })
             .expect(200);
 
@@ -213,7 +218,7 @@ describe('DELETE /account/{uuid}', () => {
         request(app)
             .post('/v1/signin')
             .send({
-                email: 'duplicate@email.com',
+                email: EMAIL,
                 password: PASSWORD
             })
             .end((err, res) => {
@@ -242,7 +247,8 @@ describe('DELETE /account/{uuid}', () => {
                 website: faker.internet.domainName(),
                 currency: faker.finance.currencyCode(),
                 country: faker.address.country(),
-                state: faker.address.state()
+                state: faker.address.state(),
+                companyType: 'LLC',
             })
             .expect(200);
 

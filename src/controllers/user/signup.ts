@@ -62,6 +62,7 @@ const router = express.Router();
  *               - lastName
  *               - email
  *               - password
+ *               - accountType
  *               properties:
  *                   firstName:
  *                       type: string
@@ -105,11 +106,6 @@ const router = express.Router();
  *                                     example: Created user successfully
  *                                 user:
  *                                     type: object
- *                                     required:
- *                                     - firstName
- *                                     - lastName
- *                                     - email
- *                                     - password
  *                                     properties:
  *                                         firstName:
  *                                             type: string
@@ -138,7 +134,7 @@ router.post('/signup',
             lastName: string().required(),
             email: string().email().required().lowercase(),
             password: string().min(5).required().regex(PASSWORD_REGEX),
-            accountType: string().max(255),
+            accountType: string().max(255).required(),
             title: string().max(255),
             company: string().max(255),
             companyType: string().max(255)
