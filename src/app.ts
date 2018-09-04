@@ -42,7 +42,7 @@ passport.deserializeUser(function (user, done) {
 
 const options = {
     swaggerDefinition: {
-        host: 'localhost:5000',
+        host: process.env.HOST,
         basePath: '/v1',
         swagger: '2.0',
         info: {

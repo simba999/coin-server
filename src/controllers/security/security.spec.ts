@@ -147,7 +147,7 @@ describe('PUT /security', () => {
         should(body).have.property('message', 'Account not found');
     });
 
-    it(`should return 200 OK iulmawxowfjvaswbubohxrxfhf security created`, async () => {
+    it(`should return 200 OK if security created`, async () => {
 
         const {body: {data: { account }}} = await request(app)
             .post('/v1/account')
