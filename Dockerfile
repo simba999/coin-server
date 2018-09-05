@@ -8,7 +8,6 @@ COPY copyStaticAssets.ts /api/
 COPY LICENSE /api/
 COPY ts*.json /api/
 COPY README.md /api/
-COPY .env /api/
 
 RUN echo ENV=local \
 URL=http://localhost:80 \
