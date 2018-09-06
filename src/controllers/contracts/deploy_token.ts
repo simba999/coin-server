@@ -3,67 +3,28 @@ import * as express from 'express';
 import { date, object, string } from 'joi';
 import { errorWrap } from '../../utils';
 import validate from '../../middleware/validate';
-import { Account } from '../../models/account';
 import { badRequest } from 'boom';
 import passport from 'passport';
+import dotenv from 'dotenv';
+import HDWalletProvider from 'truffle-hdwallet-provider';
+import contract from 'truffle-contract';
+
+const Web3 = require('web3');
+
+dotenv.config();
 
 const router = express.Router();
 
 /**
  * @swagger
- * definitions:
- *     AccountInfo:
- *         type: object
- *         required:
- *         - type
- *         - name
- *         - incDate
- *         - currency
- *         - country
- *         - state
- *         - funding
- *         properties:
- *             type:
- *                 type: string
- *                 enum: [company]
- *                 example: company
- *             name:
- *                 type: string
- *                 example: New Company
- *             incDate:
- *                 type: string
- *                 example: 2016/08/29
- *             website:
- *                 type: string
- *                 example: http://ishu.com
- *             currency:
- *                 type: string
- *                 example: USD
- *             country:
- *                 type: string
- *                 example: United State
- *             state:
- *                 type: string
- *                 example: New York
- *             funding:
- *                 type: string
- *                 enum: [Not Raised Any Money, Raised Via Notes Only, Seed Stage, Series A or Later]
- *                 example: Not Raised Any Money
- *             companyType:
- *                 type: string
- *                 example: LLC
- */
-
-/**
- * @swagger
- * /account:
+ * /token/deploy:
  *     post:
  *         security:
  *         - Bearer: []
  *         tags:
- *         - Account
- *         operationId: createAccount
- *         description: Create an account. For now 'compnay'.
+ *         - Token
+ *         operationId: deployToken
+ *         description: Deploy new token with info
  *         consumes:
  *         - application/json
  *         produces:
@@ -95,15 +56,18 @@ router.post('/deploy-ishu',
     errorWrap(async (req: Request, res: Response) => {
         const body = req.body;
 
-        const account = await Account.create(body);
-        res.status(200)
-            .json({
-                status: 'success',
-                data: {
-                    'message': 'Created account successfully',
-                    account
-                }
-            });
+        const ishuETS_controller = require('/build/contracts/IshuETS.json');
+        const ropsten_infura_server = process.env.ROPSTEN_INFURA_SERVER;
+        const rinkeby_infura_server = process.env.RINKEBY_INFURA_SERVER;
+        const main_infura_server = process.env.MAINNET_INFURA_SERVER;
+        const mnemonic = process.env.MNEMONIC;
+
+        const provider = new HDWalletProvider(mnemonic, rinkeby_infura_server);
+        const web3 = new Web3(provider);
+
+        const ishuETSController = contract(ishuETS_controller);
+        ishuETSController.setProvider(provider);
+        ishuETSController.new();
     }),
 );
 

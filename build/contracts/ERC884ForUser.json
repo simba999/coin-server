@@ -1,0 +1,1473 @@
+{
+  "contractName": "ERC884ForUser",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "addr",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "hash",
+          "type": "bytes32"
+        },
+        {
+          "indexed": true,
+          "name": "sender",
+          "type": "address"
+        }
+      ],
+      "name": "VerifiedAddressAdded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "addr",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "sender",
+          "type": "address"
+        }
+      ],
+      "name": "VerifiedAddressRemoved",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "addr",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "oldHash",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "name": "hash",
+          "type": "bytes32"
+        },
+        {
+          "indexed": true,
+          "name": "sender",
+          "type": "address"
+        }
+      ],
+      "name": "VerifiedAddressUpdated",
+      "type": "event"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "addr",
+          "type": "address"
+        },
+        {
+          "name": "hash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "addVerified",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "addr",
+          "type": "address"
+        }
+      ],
+      "name": "removeVerified",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "addr",
+          "type": "address"
+        },
+        {
+          "name": "hash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "updateVerified",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "addr",
+          "type": "address"
+        },
+        {
+          "name": "hash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "isVerified",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "pragma solidity ^0.4.19;\r\n\r\n/**\r\n *  An `ERC20` compatible token that conforms to Delaware State Senate,\r\n *  149th General Assembly, Senate Bill No. 69: An act to Amend Title 8\r\n *  of the Delaware Code Relating to the General Corporation Law.\r\n *\r\n *  Implementation Details.\r\n *\r\n *  An implementation of this token standard SHOULD provide the following:\r\n *\r\n *  `name` - for use by wallets and exchanges.\r\n *  `symbol` - for use by wallets and exchanges.\r\n *\r\n *  The implementation MUST take care not to allow unauthorised access to share\r\n *  transfer functions.\r\n *\r\n *  In addition to the above the following optional `ERC20` function MUST be defined.\r\n *\r\n *  `decimals` — MUST return `0` as each token represents a single Share and Shares are non-divisible.\r\n *\r\n *  @dev Ref https://github.com/ethereum/EIPs/pull/884\r\n */\r\ncontract ERC884ForUser {\r\n\r\n    /**\r\n     *  This event is emitted when a verified address and associated identity hash are\r\n     *  added to the contract.\r\n     *  @param addr The address that was added.\r\n     *  @param hash The identity hash associated with the address.\r\n     *  @param sender The address that caused the address to be added.\r\n     */\r\n    event VerifiedAddressAdded(\r\n        address indexed addr,\r\n        bytes32 hash,\r\n        address indexed sender\r\n    );\r\n\r\n    /**\r\n     *  This event is emitted when a verified address its associated identity hash are\r\n     *  removed from the contract.\r\n     *  @param addr The address that was removed.\r\n     *  @param sender The address that caused the address to be removed.\r\n     */\r\n    event VerifiedAddressRemoved(address indexed addr, address indexed sender);\r\n\r\n    /**\r\n     *  This event is emitted when the identity hash associated with a verified address is updated.\r\n     *  @param addr The address whose hash was updated.\r\n     *  @param oldHash The identity hash that was associated with the address.\r\n     *  @param hash The hash now associated with the address.\r\n     *  @param sender The address that caused the hash to be updated.\r\n     */\r\n    event VerifiedAddressUpdated(\r\n        address indexed addr,\r\n        bytes32 oldHash,\r\n        bytes32 hash,\r\n        address indexed sender\r\n    );\r\n\r\n    /**\r\n     *  Add a verified address, along with an associated verification hash to the contract.\r\n     *  Upon successful addition of a verified address, the contract must emit\r\n     *  `VerifiedAddressAdded(addr, hash, msg.sender)`.\r\n     *  It MUST throw if the supplied address or hash are zero, or if the address has already been supplied.\r\n     *  @param addr The address of the person represented by the supplied hash.\r\n     *  @param hash A cryptographic hash of the address holder's verified information.\r\n     */\r\n    function addVerified(address addr, bytes32 hash) public;\r\n\r\n    /**\r\n     *  Remove a verified address, and the associated verification hash. If the address is\r\n     *  unknown to the contract then this does nothing. If the address is successfully removed, this\r\n     *  function must emit `VerifiedAddressRemoved(addr, msg.sender)`.\r\n     *  It MUST throw if an attempt is made to remove a verifiedAddress that owns Tokens.\r\n     *  @param addr The verified address to be removed.\r\n     */\r\n    function removeVerified(address addr) public;\r\n\r\n    /**\r\n     *  Update the hash for a verified address known to the contract.\r\n     *  Upon successful update of a verified address the contract must emit\r\n     *  `VerifiedAddressUpdated(addr, oldHash, hash, msg.sender)`.\r\n     *  If the hash is the same as the value already stored then\r\n     *  no `VerifiedAddressUpdated` event is to be emitted.\r\n     *  It MUST throw if the hash is zero, or if the address is unverified.\r\n     *  @param addr The verified address of the person represented by the supplied hash.\r\n     *  @param hash A new cryptographic hash of the address holder's updated verified information.\r\n     */\r\n    function updateVerified(address addr, bytes32 hash) public;\r\n\r\n    /**\r\n     *  Tests that the supplied address is known to the contract.\r\n     *  @param addr The address to test.\r\n     *  @return true if the address is known to the contract.\r\n     */\r\n    function isVerified(address addr, bytes32 hash) public view returns (bool);\r\n}",
+  "sourcePath": "D:\\Ishu\\ishu-ets\\contracts\\ERC884ForUser.sol",
+  "ast": {
+    "absolutePath": "/D/Ishu/ishu-ets/contracts/ERC884ForUser.sol",
+    "exportedSymbols": {
+      "ERC884ForUser": [
+        252
+      ]
+    },
+    "id": 253,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 199,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".19"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:4"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": " An `ERC20` compatible token that conforms to Delaware State Senate,\r\n 149th General Assembly, Senate Bill No. 69: An act to Amend Title 8\r\n of the Delaware Code Relating to the General Corporation Law.\r\n\n *  Implementation Details.\r\n\n *  An implementation of this token standard SHOULD provide the following:\r\n\n *  `name` - for use by wallets and exchanges.\r\n `symbol` - for use by wallets and exchanges.\r\n\n *  The implementation MUST take care not to allow unauthorised access to share\r\n transfer functions.\r\n\n *  In addition to the above the following optional `ERC20` function MUST be defined.\r\n\n *  `decimals` — MUST return `0` as each token represents a single Share and Shares are non-divisible.\r\n\n *  @dev Ref https://github.com/ethereum/EIPs/pull/884\r",
+        "fullyImplemented": false,
+        "id": 252,
+        "linearizedBaseContracts": [
+          252
+        ],
+        "name": "ERC884ForUser",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "anonymous": false,
+            "documentation": " This event is emitted when a verified address and associated identity hash are\r\n added to the contract.\r\n @param addr The address that was added.\r\n @param hash The identity hash associated with the address.\r\n @param sender The address that caused the address to be added.\r",
+            "id": 207,
+            "name": "VerifiedAddressAdded",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 206,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 201,
+                  "indexed": true,
+                  "name": "addr",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 207,
+                  "src": "1233:20:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 200,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1233:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 203,
+                  "indexed": false,
+                  "name": "hash",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 207,
+                  "src": "1264:12:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  },
+                  "typeName": {
+                    "id": 202,
+                    "name": "bytes32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1264:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 205,
+                  "indexed": true,
+                  "name": "sender",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 207,
+                  "src": "1287:22:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 204,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1287:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1222:94:4"
+            },
+            "src": "1196:121:4"
+          },
+          {
+            "anonymous": false,
+            "documentation": " This event is emitted when a verified address its associated identity hash are\r\n removed from the contract.\r\n @param addr The address that was removed.\r\n @param sender The address that caused the address to be removed.\r",
+            "id": 213,
+            "name": "VerifiedAddressRemoved",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 212,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 209,
+                  "indexed": true,
+                  "name": "addr",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 213,
+                  "src": "1621:20:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 208,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1621:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 211,
+                  "indexed": true,
+                  "name": "sender",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 213,
+                  "src": "1643:22:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 210,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1643:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1620:46:4"
+            },
+            "src": "1592:75:4"
+          },
+          {
+            "anonymous": false,
+            "documentation": " This event is emitted when the identity hash associated with a verified address is updated.\r\n @param addr The address whose hash was updated.\r\n @param oldHash The identity hash that was associated with the address.\r\n @param hash The hash now associated with the address.\r\n @param sender The address that caused the hash to be updated.\r",
+            "id": 223,
+            "name": "VerifiedAddressUpdated",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 222,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 215,
+                  "indexed": true,
+                  "name": "addr",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 223,
+                  "src": "2104:20:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 214,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2104:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 217,
+                  "indexed": false,
+                  "name": "oldHash",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 223,
+                  "src": "2135:15:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  },
+                  "typeName": {
+                    "id": 216,
+                    "name": "bytes32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2135:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 219,
+                  "indexed": false,
+                  "name": "hash",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 223,
+                  "src": "2161:12:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  },
+                  "typeName": {
+                    "id": 218,
+                    "name": "bytes32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2161:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 221,
+                  "indexed": true,
+                  "name": "sender",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 223,
+                  "src": "2184:22:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 220,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2184:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "2093:120:4"
+            },
+            "src": "2065:149:4"
+          },
+          {
+            "body": null,
+            "documentation": " Add a verified address, along with an associated verification hash to the contract.\r\n Upon successful addition of a verified address, the contract must emit\r\n `VerifiedAddressAdded(addr, hash, msg.sender)`.\r\n It MUST throw if the supplied address or hash are zero, or if the address has already been supplied.\r\n @param addr The address of the person represented by the supplied hash.\r\n @param hash A cryptographic hash of the address holder's verified information.\r",
+            "id": 230,
+            "implemented": false,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "addVerified",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 228,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 225,
+                  "name": "addr",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 230,
+                  "src": "2770:12:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 224,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2770:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 227,
+                  "name": "hash",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 230,
+                  "src": "2784:12:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  },
+                  "typeName": {
+                    "id": 226,
+                    "name": "bytes32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2784:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "2769:28:4"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 229,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "2804:0:4"
+            },
+            "scope": 252,
+            "src": "2749:56:4",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": null,
+            "documentation": " Remove a verified address, and the associated verification hash. If the address is\r\n unknown to the contract then this does nothing. If the address is successfully removed, this\r\n function must emit `VerifiedAddressRemoved(addr, msg.sender)`.\r\n It MUST throw if an attempt is made to remove a verifiedAddress that owns Tokens.\r\n @param addr The verified address to be removed.\r",
+            "id": 235,
+            "implemented": false,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "removeVerified",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 233,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 232,
+                  "name": "addr",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 235,
+                  "src": "3269:12:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 231,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3269:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "3268:14:4"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 234,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "3289:0:4"
+            },
+            "scope": 252,
+            "src": "3245:45:4",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": null,
+            "documentation": " Update the hash for a verified address known to the contract.\r\n Upon successful update of a verified address the contract must emit\r\n `VerifiedAddressUpdated(addr, oldHash, hash, msg.sender)`.\r\n If the hash is the same as the value already stored then\r\n no `VerifiedAddressUpdated` event is to be emitted.\r\n It MUST throw if the hash is zero, or if the address is unverified.\r\n @param addr The verified address of the person represented by the supplied hash.\r\n @param hash A new cryptographic hash of the address holder's updated verified information.\r",
+            "id": 242,
+            "implemented": false,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "updateVerified",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 240,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 237,
+                  "name": "addr",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 242,
+                  "src": "3950:12:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 236,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3950:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 239,
+                  "name": "hash",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 242,
+                  "src": "3964:12:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  },
+                  "typeName": {
+                    "id": 238,
+                    "name": "bytes32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3964:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "3949:28:4"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 241,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "3984:0:4"
+            },
+            "scope": 252,
+            "src": "3926:59:4",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": null,
+            "documentation": " Tests that the supplied address is known to the contract.\r\n @param addr The address to test.\r\n @return true if the address is known to the contract.\r",
+            "id": 251,
+            "implemented": false,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "isVerified",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 247,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 244,
+                  "name": "addr",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 251,
+                  "src": "4203:12:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 243,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "4203:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 246,
+                  "name": "hash",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 251,
+                  "src": "4217:12:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  },
+                  "typeName": {
+                    "id": 245,
+                    "name": "bytes32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "4217:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "4202:28:4"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 250,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 249,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 251,
+                  "src": "4252:4:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 248,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "4252:4:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "4251:6:4"
+            },
+            "scope": 252,
+            "src": "4183:75:4",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 253,
+        "src": "837:3424:4"
+      }
+    ],
+    "src": "0:4261:4"
+  },
+  "legacyAST": {
+    "absolutePath": "/D/Ishu/ishu-ets/contracts/ERC884ForUser.sol",
+    "exportedSymbols": {
+      "ERC884ForUser": [
+        252
+      ]
+    },
+    "id": 253,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 199,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".19"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:4"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": " An `ERC20` compatible token that conforms to Delaware State Senate,\r\n 149th General Assembly, Senate Bill No. 69: An act to Amend Title 8\r\n of the Delaware Code Relating to the General Corporation Law.\r\n\n *  Implementation Details.\r\n\n *  An implementation of this token standard SHOULD provide the following:\r\n\n *  `name` - for use by wallets and exchanges.\r\n `symbol` - for use by wallets and exchanges.\r\n\n *  The implementation MUST take care not to allow unauthorised access to share\r\n transfer functions.\r\n\n *  In addition to the above the following optional `ERC20` function MUST be defined.\r\n\n *  `decimals` — MUST return `0` as each token represents a single Share and Shares are non-divisible.\r\n\n *  @dev Ref https://github.com/ethereum/EIPs/pull/884\r",
+        "fullyImplemented": false,
+        "id": 252,
+        "linearizedBaseContracts": [
+          252
+        ],
+        "name": "ERC884ForUser",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "anonymous": false,
+            "documentation": " This event is emitted when a verified address and associated identity hash are\r\n added to the contract.\r\n @param addr The address that was added.\r\n @param hash The identity hash associated with the address.\r\n @param sender The address that caused the address to be added.\r",
+            "id": 207,
+            "name": "VerifiedAddressAdded",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 206,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 201,
+                  "indexed": true,
+                  "name": "addr",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 207,
+                  "src": "1233:20:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 200,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1233:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 203,
+                  "indexed": false,
+                  "name": "hash",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 207,
+                  "src": "1264:12:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  },
+                  "typeName": {
+                    "id": 202,
+                    "name": "bytes32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1264:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 205,
+                  "indexed": true,
+                  "name": "sender",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 207,
+                  "src": "1287:22:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 204,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1287:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1222:94:4"
+            },
+            "src": "1196:121:4"
+          },
+          {
+            "anonymous": false,
+            "documentation": " This event is emitted when a verified address its associated identity hash are\r\n removed from the contract.\r\n @param addr The address that was removed.\r\n @param sender The address that caused the address to be removed.\r",
+            "id": 213,
+            "name": "VerifiedAddressRemoved",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 212,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 209,
+                  "indexed": true,
+                  "name": "addr",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 213,
+                  "src": "1621:20:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 208,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1621:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 211,
+                  "indexed": true,
+                  "name": "sender",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 213,
+                  "src": "1643:22:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 210,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1643:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1620:46:4"
+            },
+            "src": "1592:75:4"
+          },
+          {
+            "anonymous": false,
+            "documentation": " This event is emitted when the identity hash associated with a verified address is updated.\r\n @param addr The address whose hash was updated.\r\n @param oldHash The identity hash that was associated with the address.\r\n @param hash The hash now associated with the address.\r\n @param sender The address that caused the hash to be updated.\r",
+            "id": 223,
+            "name": "VerifiedAddressUpdated",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 222,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 215,
+                  "indexed": true,
+                  "name": "addr",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 223,
+                  "src": "2104:20:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 214,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2104:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 217,
+                  "indexed": false,
+                  "name": "oldHash",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 223,
+                  "src": "2135:15:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  },
+                  "typeName": {
+                    "id": 216,
+                    "name": "bytes32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2135:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 219,
+                  "indexed": false,
+                  "name": "hash",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 223,
+                  "src": "2161:12:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  },
+                  "typeName": {
+                    "id": 218,
+                    "name": "bytes32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2161:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 221,
+                  "indexed": true,
+                  "name": "sender",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 223,
+                  "src": "2184:22:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 220,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2184:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "2093:120:4"
+            },
+            "src": "2065:149:4"
+          },
+          {
+            "body": null,
+            "documentation": " Add a verified address, along with an associated verification hash to the contract.\r\n Upon successful addition of a verified address, the contract must emit\r\n `VerifiedAddressAdded(addr, hash, msg.sender)`.\r\n It MUST throw if the supplied address or hash are zero, or if the address has already been supplied.\r\n @param addr The address of the person represented by the supplied hash.\r\n @param hash A cryptographic hash of the address holder's verified information.\r",
+            "id": 230,
+            "implemented": false,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "addVerified",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 228,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 225,
+                  "name": "addr",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 230,
+                  "src": "2770:12:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 224,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2770:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 227,
+                  "name": "hash",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 230,
+                  "src": "2784:12:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  },
+                  "typeName": {
+                    "id": 226,
+                    "name": "bytes32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2784:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "2769:28:4"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 229,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "2804:0:4"
+            },
+            "scope": 252,
+            "src": "2749:56:4",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": null,
+            "documentation": " Remove a verified address, and the associated verification hash. If the address is\r\n unknown to the contract then this does nothing. If the address is successfully removed, this\r\n function must emit `VerifiedAddressRemoved(addr, msg.sender)`.\r\n It MUST throw if an attempt is made to remove a verifiedAddress that owns Tokens.\r\n @param addr The verified address to be removed.\r",
+            "id": 235,
+            "implemented": false,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "removeVerified",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 233,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 232,
+                  "name": "addr",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 235,
+                  "src": "3269:12:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 231,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3269:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "3268:14:4"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 234,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "3289:0:4"
+            },
+            "scope": 252,
+            "src": "3245:45:4",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": null,
+            "documentation": " Update the hash for a verified address known to the contract.\r\n Upon successful update of a verified address the contract must emit\r\n `VerifiedAddressUpdated(addr, oldHash, hash, msg.sender)`.\r\n If the hash is the same as the value already stored then\r\n no `VerifiedAddressUpdated` event is to be emitted.\r\n It MUST throw if the hash is zero, or if the address is unverified.\r\n @param addr The verified address of the person represented by the supplied hash.\r\n @param hash A new cryptographic hash of the address holder's updated verified information.\r",
+            "id": 242,
+            "implemented": false,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "updateVerified",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 240,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 237,
+                  "name": "addr",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 242,
+                  "src": "3950:12:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 236,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3950:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 239,
+                  "name": "hash",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 242,
+                  "src": "3964:12:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  },
+                  "typeName": {
+                    "id": 238,
+                    "name": "bytes32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3964:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "3949:28:4"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 241,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "3984:0:4"
+            },
+            "scope": 252,
+            "src": "3926:59:4",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": null,
+            "documentation": " Tests that the supplied address is known to the contract.\r\n @param addr The address to test.\r\n @return true if the address is known to the contract.\r",
+            "id": 251,
+            "implemented": false,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "isVerified",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 247,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 244,
+                  "name": "addr",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 251,
+                  "src": "4203:12:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 243,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "4203:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 246,
+                  "name": "hash",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 251,
+                  "src": "4217:12:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  },
+                  "typeName": {
+                    "id": 245,
+                    "name": "bytes32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "4217:7:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "4202:28:4"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 250,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 249,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 251,
+                  "src": "4252:4:4",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 248,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "4252:4:4",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "4251:6:4"
+            },
+            "scope": 252,
+            "src": "4183:75:4",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 253,
+        "src": "837:3424:4"
+      }
+    ],
+    "src": "0:4261:4"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "2.0.1",
+  "updatedAt": "2018-08-27T21:13:42.221Z"
+}

@@ -27,6 +27,8 @@ import SignUp from './controllers/user/signup';
 import SignIn from './controllers/user/signin';
 import ChangePassword from './controllers/user/changepassword';
 
+import ContractDeploy from './controllers/contracts/deploy_token';
+
 import InitializeCaptable from './controllers/captable/initialize';
 
 const router = express.Router();
@@ -57,6 +59,8 @@ router.use('/', InviteAcceptShareholder);
 router.use('/', SignUp);
 router.use('/', SignIn);
 router.use('/', ChangePassword);
+
+router.use('/', ContractDeploy);
 
 router.use('/captable', InitializeCaptable);
 

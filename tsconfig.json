@@ -19,6 +19,8 @@
     "skipLibCheck": true
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "./node_modules/@machinomy/types-truffle-hdwallet-provider/index.d.ts",
+    "./node_modules/@machinomy/types-truffle-contract/index.d.ts"
   ]
 }
