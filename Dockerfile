@@ -30,6 +30,7 @@ COPY src /api/src
 RUN npm install
 RUN npm run build
 RUN npm install pg
+RUN npm install truffle-contract
 
 EXPOSE 80
 ENTRYPOINT npm run serve
