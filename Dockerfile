@@ -15,7 +15,7 @@ DEBUG=ishu:* \
 PORT=80 \
 #DATABASE_URI=mysql://root:password@localhost/ishu_local \
 #DATABASE_URI=postgres://postgres:admin@localhost:5432/ishu_local \
-DATABASE_URI=://ishu:D@[8E=P3Yid829}6@35.202.219.206/ishu_staging \
+DATABASE_URI=postgres://ishu:D@[8E=P3Yid829}6@35.202.219.206/ishu_staging \
 DATABASE_LOGGIN=true \
 #SMTP_HOST=smtp.mailtrap.io \
 #SMTP_USERNAME=09ca7f26c7bddb \
