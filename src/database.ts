@@ -20,15 +20,7 @@ export async function initSequelize(config: any) {
 
     [dbAuth.username, dbAuth.password] = uriParts.auth.split(':');
 
-    const sequelize = new Sequelize({
-        dialect: uriParts.protocol.replace(':', ''),
-        database: uriParts.path.replace('/', ''),
-        username: dbAuth.username,
-        password: dbAuth.password,
-        operatorsAliases: false,
-        logging: false,
-        underscored: true,
-    } as any);
+    const sequelize = new Sequelize(config.database.uri);
 
     sequelize.addModels([
         User,
