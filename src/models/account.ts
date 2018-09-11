@@ -1,6 +1,16 @@
-import { Table, Column, Model, DataType, BelongsToMany, HasMany, PrimaryKey, IsUUID } from 'sequelize-typescript';
+import {
+    Table,
+    Column,
+    Model,
+    DataType,
+    BelongsToMany,
+    HasMany,
+    PrimaryKey,
+    IsUUID,
+    BelongsTo
+} from 'sequelize-typescript';
 import { Security } from './security';
-import { ShareholderAccount } from './shareholder_account';
+import { UserAccount } from './user_account';
 import { Shareholder } from './shareholder';
 
 @Table({
@@ -25,6 +35,42 @@ export class Account extends Model<Account> {
 
     @Column name: string;
 
+    @Column({
+        type: DataType.DATE,
+        field: 'inc_date',
+    })
+    incDate: Date;
+
+    @Column website: string;
+
+    @Column currency: string;
+
+    @Column country: string;
+
+    @Column state: string;
+
+    @Column({
+        field: 'company_type',
+    })
+    companyType: string;
+
+    @Column({
+        type: DataType.ENUM('Not Raised Any Money', 'Raised Via Notes Only', 'Seed Stage', 'Series A or Later')
+    })
+    funding: string;
+
+    @Column({
+        type: DataType.DATE,
+        field: 'created_at',
+    })
+    createdAt: boolean;
+
+    @Column({
+        type: DataType.DATE,
+        field: 'deleted_at',
+    })
+    deletedAt: boolean;
+
     @HasMany(() => Security) securities: Security[];
-    @BelongsToMany(() => Shareholder, () => ShareholderAccount) shareholder: Shareholder[];
+    @HasMany(() => UserAccount) userAccounts: UserAccount[];
 }

@@ -3,9 +3,9 @@ import { methodNotAllowed, notFound, unauthorized } from 'boom';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 
-import { Shareholder } from './shareholder';
 import { UserToken } from './user_token';
 import { BillingSubscription } from './billing_subscription';
+import { Shareholder } from './shareholder';
 import generateConfig from '../config';
 
 export const PASSWORD_REGEX = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[$&+,:;=?@#|'<>.^*()%!-]).{6,}$/;

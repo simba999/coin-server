@@ -35,13 +35,9 @@ export class Security extends Model<Security> {
     })
     type: string;
 
-    @ForeignKey(() => Security)
-    @IsUUID(4)
-    @Column({
-        field: 'underlying_security',
-        type: DataType.UUID,
-    })
-    underlyingSecurity: string;
+    @Column authorized: number;
+
+    @Column liquidation: string;
 
     @ForeignKey(() => Account)
     @IsUUID(4)
@@ -52,15 +48,17 @@ export class Security extends Model<Security> {
     accountId: string;
 
     @Column({
-        field: 'security_class',
+        type: DataType.DATE,
+        field: 'created_at',
     })
-    securityClass: string;
+    createdAt: boolean;
 
-    @Column authorized: number;
-    @Column issued: number;
-    @Column tokenized: string;
+    @Column({
+        type: DataType.DATE,
+        field: 'deleted_at',
+    })
+    deletedAt: boolean;
 
-    @HasMany(() => SecurityTransaction) securityTransactions: SecurityTransaction[];
     @BelongsTo(() => Account) account: Account;
-    @BelongsTo(() => Security) security: Security;
+    @HasMany(() => SecurityTransaction) securityTransactions: SecurityTransaction[];
 }
